@@ -1,0 +1,27 @@
+﻿landmark,regex,left_default,top_default,x_tolerance,y_tolerance
+(a) Region,\(a\)\s*Region,0,0,1,1
+(b) Number of offices,\(b\)\s*Nu,0,0,1,1
+(c) Number of employees,\(c\)\s*Nu,0,0,1,1
+(d) Activities conducted,\(d\)\s*Act,0,0,1,1
+(e) Specific type,\(e\)\s*If,0,0,1,1
+(f) Total Expenditures,\(f\)\s*Total,0,0,1,1
+"Schedule F, Part I, Item 3a",3a\s*Sub,0,0,1,1
+(a) Name of organization,\(a\)\s*Na,0,0,1,1
+(b) IRS code,\(b\)\s*IRS,0,0,1,1
+(c) Region,\(c\)\s*Region,0,0,1,1
+(d) Purpose,\(d\)\s*Purpose,0,0,1,1
+(e) Amount,\(e\)\s*Amount,0,0,1,1
+(f) Manner,\(f\)\s*Manner,0,0,1,1
+(g) Amount,\(g\)\s*Amount,0,0,1,1
+(h) Description,\(h\)\s*Description,0,0,1,1
+(i) Method,\(i\)\s*Method,0,0,1,1
+"Schedule F, Part II, Item 2",2\s*Enter,0,0,1,1
+(a) Type,\(a\)\s*Type,0,0,1,1
+(b) Region,\(b\)\s*Region,0,0,1,1
+(c) Number of recipients,\(c\)\s*Nu,0,0,1,1
+(d) Amount,\(d\)\s*Amount,0,0,1,1
+(e) Manner,\(e\)\s*Manner,0,0,1,1
+(f) Amount,\(f\)\s*Amount,0,0,1,1
+(g) Description,\(g\)\s*Description,0,0,1,1
+(h) Method,\(h\)\s*Method,0,0,1,1
+Schedule F,Schedule F,0.8,0.8,0.2,0.2
