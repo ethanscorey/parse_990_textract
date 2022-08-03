@@ -53,9 +53,7 @@ class Extractor:
             )
         if not any(words_in_box):
             return ""
-        print(words_in_box)
         if "|" in self.regex.pattern:
-            print("Getting best match")
             result = get_best_match(words_in_box, self.regex, "NO MATCH")
         else:
             result = get_regex(words_in_box, self.regex, 1, "NO MATCH")

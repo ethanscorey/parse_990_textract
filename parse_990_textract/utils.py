@@ -32,10 +32,8 @@ def get_regex(string, regex, match_group=0, alt_value=None):
 
 
 def get_best_match(string, regex, alt_value=None):
-    print(regex.pattern)
     match = regex.search(string)
     if match is not None:
-        print(match.groups())
         return max(
             match.groups(),
             key=lambda x: len(x) if x is not None else 0
