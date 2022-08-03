@@ -7,14 +7,14 @@ Item G,"Gross re\w{3,}",0.71,0.19,Page 1,0.1,0.1
 Item H,H\(a\),0.63,0.22,Page 1,0.09,0.1
 Item I,Tax\W*exempt [se]tatu[es],0.02,0.25,Page 1,0.2,0.1
 Item J,Website|J W\w+,0.02,0.26,Page 1,0.09,0.2
-Item K,Form of org,0.02,0.28,Page 1,0.09,0.2
+Item K,Form of org|Type of org,0.02,0.28,Page 1,0.09,0.2
 Item L,Y[eo]ar of formation,0.54,0.28,Page 1,0.2,0.2
 Item M,domici[tl]e,0.71,0.28,Page 1,0.2,0.2
 "Part I, Item 1",mission or most,0.1,0.3,Page 1,0.1,0.15
 "Part I, Item 2",organization discontinued,0.21,0.36,Page 1,0.2,0.2
 "Part I, Item 3",Number of voting,0.07,0.37,Page 1,0.1,0.15
 "Part I, Item 4",Number of [iI]nd,0.07,0.39,Page 1,0.1,0.15
-"Part I, Item 5",[iI]ndividuals employed,0.1,0.41,Page 1,0.1,0.15
+"Part I, Item 5",[iI]ndividuals employed|employees,0.1,0.41,Page 1,0.1,0.15
 "Part I, Item 6",volunt[ea]{2}rs,0.1,0.43,Page 1,0.1,0.15
 "Part I, Item 7a",unrelated business revenue,0.08,0.45,Page 1,0.1,0.15
 "Part I, Item 7b",Net unrelated bu,0.07,0.47,Page 1,0.1,0.15
@@ -78,22 +78,22 @@ Total expenses,^\(A\)$,0.49,0.1,Page 10,0.1,0.1
 Program service expenses,^\(B\)$,0.62,0.1,Page 10,0.1,0.1
 Management and general expenses,^\([Cc]\)$,0.75,0.1,Page 10,0.1,0.1
 Fundraising expenses,^\(D\)$,0.88,0.1,Page 10,0.1,0.1
-"Schedule F, Part I, Item 3a",^3a Sub,0.01,0.8,"Schedule F, Page 1",0.1,0.1
-"Schedule F, Part I, Item 3b",^b Total,0.01,0.82,"Schedule F, Page 1",0.1,0.1
-"Schedule F, Part I, Item 3c",^[cC] Totals,0.01,0.86,"Schedule F, Page 1",0.1,0.1
-(b) Number of offices,\(b\) Number,0.27,0.51,"Schedule F, Page 1",0.1,0.1
-(c) Number of employees,\([cC]\) Number,0.38,0.51,"Schedule F, Page 1",0.1,0.1
-(d) Activities conducted,\(d\) Act,0.49,0.51,"Schedule F, Page 1",0.1,0.1
-(e) Specific type,\([aeo]\) If,0.65,0.51,"Schedule F, Page 1",0.1,0.1
-(f) Total expenditures,\(f\) Tota,0.84,0.51,"Schedule F, Page 1",0.1,0.1
-"Schedule F, Part II, Item 2",2 Enter,0,0.78,"Schedule F, Page 2",0.1,0.1
-"Schedule F, Part II, Item 3",3 Enter,0,0.9,"Schedule F, Page 2",0.1,0.1
-(a) Name of organization,\(a\) Name,0.03,0.2,"Schedule F, Page 2",0.1,0.1
-(b) IRS code,\(b\) IRS,0.12,0.2,"Schedule F, Page 2",0.1,0.1
-(c) Region,\([cC]\) Region,0.23,0.2,"Schedule F, Page 2",0.1,0.1
-(d) Purpose of grant,\(d\) Purpose,0.33,0.2,"Schedule F, Page 2",0.1,0.1
-(e) Amount of cash grant,\(e\) Amount,0.44,0.2,"Schedule F, Page 2",0.1,0.1
-(f) Manner of cash disbursement,\(f\) Manner,0.56,0.2,"Schedule F, Page 2",0.1,0.1
-(g) Amount of noncash assistance,\(g\) Amount,0.68,0.2,"Schedule F, Page 2",0.1,0.1
-(h) Description of noncash assistance,\(h\) Descr,0.78,0.2,"Schedule F, Page 2",0.1,0.1
-(i) Method of valuation,\(i\) Method,0.9,0.2,"Schedule F, Page 2",0.1,0.1
+"Schedule F, Part I, Item 3a",^3a Sub,0.01,0.8,"Schedule F, Page 1",0.1,0.6
+"Schedule F, Part I, Item 3b",^b Total,0.01,0.82,"Schedule F, Page 1",0.1,0.6
+"Schedule F, Part I, Item 3c",^[cC] Totals,0.01,0.86,"Schedule F, Page 1",0.1,0.6
+(b) Number of offices,\(b\) Number,0.27,0.51,"Schedule F, Page 1",0.1,0.6
+(c) Number of employees,\([cC]\) Number,0.38,0.51,"Schedule F, Page 1",0.1,0.6
+(d) Activities conducted,\(d\) Act,0.49,0.51,"Schedule F, Page 1",0.1,0.6
+(e) Specific type,\([aeo]\) If,0.65,0.51,"Schedule F, Page 1",0.1,0.6
+(f) Total expenditures,\(f\) Tota,0.84,0.51,"Schedule F, Page 1",0.1,0.6
+"Schedule F, Part II, Item 2",2 Enter,0,0.78,"Schedule F, Page 2",0.1,0.6
+"Schedule F, Part II, Item 3",3 Enter,0,0.9,"Schedule F, Page 2",0.1,0.6
+(a) Name of organization,\(a\) Name,0.03,0.2,"Schedule F, Page 2",0.1,0.6
+(b) IRS code,\(b\) IRS,0.12,0.2,"Schedule F, Page 2",0.1,0.6
+(c) Region,\([cC]\) Region,0.23,0.2,"Schedule F, Page 2",0.1,0.6
+(d) Purpose of grant,\(d\) Purpose,0.33,0.2,"Schedule F, Page 2",0.1,0.6
+(e) Amount of cash grant,\(e\) Amount,0.44,0.2,"Schedule F, Page 2",0.1,0.6
+(f) Manner of cash disbursement,\(f\) Manner,0.56,0.2,"Schedule F, Page 2",0.1,0.6
+(g) Amount of noncash assistance,\(g\) Amount,0.68,0.2,"Schedule F, Page 2",0.1,0.6
+(h) Description of noncash assistance,\(h\) Descr,0.78,0.2,"Schedule F, Page 2",0.1,0.6
+(i) Method of valuation,\(i\) Method,0.9,0.2,"Schedule F, Page 2",0.1,0.6

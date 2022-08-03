@@ -4,6 +4,39 @@ from .models import BoundingBox, Extractor
 from .utils import get_coordinate, setup_config, setup_logger
 
 
+def find_pages(ocr_data):
+    return {
+        "Page 1": id_first_page(ocr_data),
+        "Page 10": id_page_10(ocr_data),
+        "Schedule F, Page 1": (sched_f := id_sched_f(ocr_data)),
+        "Schedule F, Page 2": sched_f+1 if sched_f else sched_f,
+    }
+
+
+def id_sched_f(ocr_data):
+    matching_page = ocr_data.loc[
+        ocr_data["Text"].str.contains("General Information on Activities Outside"),
+        "Page"
+    ]
+    if not matching_page.count():
+        return 0
+    return matching_page.iloc[0]
+
+
+def id_page_10(ocr_data):
+    return ocr_data.loc[
+        ocr_data["Text"].str.contains("Statement of Functional Expenses"),
+        "Page"
+    ].iloc[0]
+
+
+def id_first_page(ocr_data):
+    by_page = ocr_data.groupby("Page")
+    if by_page["Top"].max().iloc[0] < 0.7:
+        return 2
+    return 1
+
+
 def create_bounding_box(
     roadmap,
     left_key,

@@ -1,6 +1,12 @@
 import dataclasses
+import re
 
-from .utils import get_coordinate, get_regex, setup_config, setup_logger
+import pandas as pd
+
+from .utils import (
+    get_best_match, get_coordinate, get_regex,
+    setup_config, setup_logger
+)
 
 
 config = setup_config()
@@ -14,13 +20,16 @@ class BoundingBox:
     right: int
     bottom: int
 
-    def get_text_in_box(self, text, page):
-        return text.loc[
+    def get_text_in_box(self, text, page_no):
+        text_in_box = text.loc[
             text["Top"].between(self.top, self.bottom)
             & text["Left"].between(self.left, self.right)
             & (text["Page"] == page_no),
             "Text"
-        ].agg(lambda " ".join(x.values))
+        ].agg(lambda x: " ".join(x.values))
+        if not any(text_in_box):
+            return ""
+        return text_in_box
         
         
 @dataclasses.dataclass
@@ -44,9 +53,14 @@ class Extractor:
             )
         if not any(words_in_box):
             return ""
-        result = get_regex(words_in_box, self.regex, 1, "NO MATCH")
+        print(words_in_box)
+        if "|" in self.regex.pattern:
+            print("Getting best match")
+            result = get_best_match(words_in_box, self.regex, "NO MATCH")
+        else:
+            result = get_regex(words_in_box, self.regex, 1, "NO MATCH")
         if result == "NO MATCH":
-            print(self.name, words_in_box)
+            logger.info(f"No match for {self.name} in {words_in_box}")
             return ""
         return result
 
@@ -113,7 +127,7 @@ class TableExtractor:
         page_words = words.loc[
             (words["Page"] == page)
         ]
-        row_top = page_words.loc[
+        row_tops = page_words.loc[
             page_words["Left"].between(
                 *self.get_index_col_span()
             )
@@ -139,6 +153,8 @@ class TableExtractor:
                 ).values 
             )
         if rows:
+            logger.debug(f"ROWS: {rows}")
+            logger.debug(f"FIELDS: {self.fields}")
             return pd.DataFrame(rows, columns=self.fields)
         return pd.NA
         

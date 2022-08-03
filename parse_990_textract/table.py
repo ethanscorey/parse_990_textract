@@ -1,7 +1,12 @@
 import pandas as pd
 
 from .models import TableExtractor
-from .parse import create_tablemap, find_item, find_table_pages
+from .parse import find_item, find_table_pages
+from .utils import setup_config, setup_logger
+
+
+config = setup_config()
+logger = setup_logger(__name__, config)
 
 
 def create_tablemap(lines, tablemap_df, page):
@@ -76,7 +81,7 @@ def extract_table_data(
             axis=1
         ).dropna()
     except KeyError as e:
-        print(e)
+        logger.error(f"{e}: {e.args}")
     else:
         if rows.count().any():
             return pd.concat(rows.values).reset_index(drop=True)

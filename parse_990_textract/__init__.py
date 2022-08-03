@@ -25,7 +25,7 @@ def handler(event, context):
     roadmap_df = pd.read_csv("990_roadmap.csv")
     schedule_f_tablemap_df = pd.read_csv("schedule_f_table_roadmap.csv")
     schedule_f_table_extractor_df = pd.read_csv("schedule_f_table_extractors.csv")
-    schedule_f_row_extractor = pd.read_csv("schedule_f_row_extractors.csv")
+    schedule_f_row_extractor_df = pd.read_csv("schedule_f_row_extractors.csv")
 
     PART_I_HEADER = r"\(a\) Region\s*\(b\)\s*N|Schedule F,? Part I\b"
     PART_II_HEADER = r"\([cC]\) Region\s*\(d\)\s*P|Schedule F,? Part II\b"
@@ -46,6 +46,7 @@ def handler(event, context):
         }
     lines = data.loc[data["BlockType"] == "LINE"]
     words = data.loc[data["BlockType"] == "WORD"]
+    pages = lines.groupby("Page")
     page_map = find_pages(lines)
     roadmap = create_roadmap(
         lines, roadmap_df, page_map
@@ -61,6 +62,7 @@ def handler(event, context):
     )
     if part_i_table is not None:
         part_i_table["file"] = event.get("pdf_key")
+        part_i_table = part_i_table.to_dict()
     part_ii_table = extract_table_data(
         pages, lines, words, PART_II_HEADER, PART_II_TABLE_NAME,
         schedule_f_tablemap_df, schedule_f_table_extractor_df,
@@ -68,6 +70,7 @@ def handler(event, context):
     )
     if part_ii_table is not None:
         part_ii_table["file"] = event.get("pdf_key")
+        part_ii_table = part_ii_table.to_dict()
     part_iii_table = extract_table_data(
         pages, lines, words, PART_III_HEADER, PART_III_TABLE_NAME,
         schedule_f_tablemap_df, schedule_f_table_extractor_df,
@@ -75,12 +78,13 @@ def handler(event, context):
     )
     if part_iii_table is not None:
         part_iii_table["file"] = event.get("pdf_key")
+        part_iii_table = part_iii_table.to_dict()
     
     return {
         "statusCode": 200,
         "body": json.dumps(
             {
-                "filing_data": row,
+                "filing_data": row.to_dict(),
                 "part_i_data": part_i_table,
                 "part_ii_data": part_ii_table,
                 "part_iii_data": part_iii_table,
