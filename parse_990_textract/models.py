@@ -96,7 +96,7 @@ class TableExtractor:
                 "Top", "Top_Default",
             ) + self.bottom_delta
         except KeyError:
-            return 1
+            return .8
         
     def get_index_col_span(self):
         return (
@@ -135,12 +135,12 @@ class TableExtractor:
                 self.table_top, self.table_bottom
             ),
             "Top"
-        ].reset_index(drop=True)
-        row_bottoms =  row_tops - self.row_margin
+        ].sort_values().reset_index(drop=True) - self.row_margin
+        row_bottoms =  row_tops
         row_intervals = pd.DataFrame(
             {
                 "row_top": row_tops,
-                "row_bottom": row_bottoms.iloc[:1].reset_index(drop=True),
+                "row_bottom": row_bottoms.iloc[1:].reset_index(drop=True),
             }
         )
         return row_intervals.fillna(self.table_bottom)

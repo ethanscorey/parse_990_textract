@@ -44,6 +44,7 @@ def extract_table_data(
         pages["Text"].agg(lambda words: " ".join(words)),
         header,
     )
+    print("Table pages:", table_pages)
     tablemaps = pd.DataFrame(
         {
             "page": table_pages,
@@ -52,12 +53,15 @@ def extract_table_data(
             ),
         }
     )
+    print("Tablemaps:", tablemaps["tablemap"].iloc[0])
     table_row_extractors = row_extractor_df.loc[
         row_extractor_df["table"] == table_name
     ]
+    print("Table row extractors:", table_row_extractors)
     table = table_extractor_df.loc[
         table_extractor_df["table"] == table_name
     ].iloc[0]
+    print("Table:", table)
     try:
         rows = tablemaps.assign(
             extractor=tablemaps["tablemap"].map(
