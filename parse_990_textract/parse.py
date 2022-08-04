@@ -4,6 +4,10 @@ from .models import BoundingBox, Extractor
 from .utils import get_coordinate, setup_config, setup_logger
 
 
+config = setup_config()
+logger = setup_logger(__name__, config)
+
+
 def find_pages(ocr_data):
     return {
         "Page 1": id_first_page(ocr_data),
@@ -24,10 +28,14 @@ def id_sched_f(ocr_data):
 
 
 def id_page_10(ocr_data):
-    return ocr_data.loc[
+    matching_page = ocr_data.loc[
         ocr_data["Text"].str.contains("Statement of Functional Expenses"),
         "Page"
-    ].iloc[0]
+    ]
+    if not matching_page.count():
+        logger.error("Statement of functional expenses missing")
+        return 0
+    return matching_page.iloc[0]
 
 
 def id_first_page(ocr_data):
