@@ -36,15 +36,7 @@ def handler(event, context):
     PART_III_TABLE_NAME = "Grants to Individuals Outside the United States"
 
     bucket = boto3.resource("s3").Bucket(event.get("bucket_name"))
-    try:
-        data = open_df(bucket, event.get("textract_job_id"))
-    except Exception as e:
-        logger.error(e)
-        logger.info(f"textract_job_id: {event.get('textract_job_id')}")
-        return {
-            "statusCode": 400,
-            "body": f"Error: {e}",
-        }
+    data = open_df(bucket, event.get("textract_job_id"))
 
     lines = data.loc[data["BlockType"] == "LINE"]
     words = data.loc[data["BlockType"] == "WORD"]
