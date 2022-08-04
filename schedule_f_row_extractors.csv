@@ -18,7 +18,7 @@ type_of_grant_assistance,Top Left Corner,0,(b) Region,-0.03,Grants to Individual
 region,(b) Region,-0.03,(c) Number of recipients,-0.01,Grants to Individuals Outside the United States
 number_recipients,(c) Number of recipients,-0.01,(d) Amount,-0.01,Grants to Individuals Outside the United States
 amount_cash_grant,(d) Amount,-0.01,(e) Manner,-0.02,Grants to Individuals Outside the United States
-manner_cash_disbursemetn,(e) Manner,-0.02,(f) Amount,-0.01,Grants to Individuals Outside the United States
+manner_cash_disbursement,(e) Manner,-0.02,(f) Amount,-0.01,Grants to Individuals Outside the United States
 amount_noncash_assistance,(f) Amount,-0.01,(g) Description,-0.01,Grants to Individuals Outside the United States
-desc_noncash_assistance,(g) Description,-0.01,(h) Method,-0.01,Grants to Individuals Outside the United States
-method_valuation,(h) Method,-0.01,Bottom Right Corner,0,Grants to Individuals Outside the United States
+desc_noncash_assistance,(g) Description,-0.01,(h) Method,-0.05,Grants to Individuals Outside the United States
+method_valuation,(h) Method,-0.05,Bottom Right Corner,0,Grants to Individuals Outside the United States

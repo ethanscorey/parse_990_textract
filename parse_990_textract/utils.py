@@ -1,6 +1,7 @@
 import logging
 import math
 import os
+import re
 
 from dotenv import dotenv_values
 import pandas as pd
@@ -46,3 +47,17 @@ def get_coordinate(roadmap, index, col, default):
     if pd.isna(value):
         value = roadmap.loc[index, default]
     return trunc_num(value, 2)
+
+
+def clean_num(text: str) -> str:
+    if text:
+        fix_zeroes = re.sub(r"[oO]", "0", text.strip())
+        fix_ones = re.sub(r"[liI]", "1", fix_zeroes)
+        fix_twos = re.sub("Z", "2", fix_ones)
+        fix_fives = re.sub(r"S", "5", fix_twos)
+        cleaned = re.sub(r"[^-.\d()]|\.$|(?<=.)[-(]|\)(?=.)", "", fix_fives)
+        if cleaned.startswith("(") and cleaned.endswith(")"):
+            return f"-{cleaned[1:-1]}"
+        else:
+            return re.sub(r"[()]", "", cleaned)
+    return ""
