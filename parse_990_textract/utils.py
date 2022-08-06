@@ -43,7 +43,7 @@ def get_best_match(string, regex, alt_value=None):
 
 
 def get_coordinate(roadmap, index, col, default):
-    value = roadmap.loc[index, col]
+    value = roadmap.at[index, col]
     if pd.isna(value):
         value = roadmap.loc[index, default]
     return trunc_num(value, 2)

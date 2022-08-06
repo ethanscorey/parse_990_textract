@@ -1,24 +1,24 @@
 ﻿field,col_left,left_delta,col_right,right_delta,table
-region,Top Left Corner,0,(b) Number of offices,-0.01,Activities per Region
-number_offices,(b) Number of offices,-0.01,(c) Number of employees,-0.01,Activities per Region
-number_employees,(c) Number of employees,-0.01,(d) Activities conducted,-0.01,Activities per Region
-activities_conducted,(d) Activities conducted,-0.01,(e) Specific type,-0.01,Activities per Region
-specific_type_activity,(e) Specific type,-0.01,(f) Total Expenditures,-0.01,Activities per Region
+region,Top Left Corner,0,(b) Number of offices,0,Activities per Region
+number_offices,(b) Number of offices,-0.01,(c) Number of employees,0,Activities per Region
+number_employees,(c) Number of employees,-0.01,(d) Activities conducted,0,Activities per Region
+activities_conducted,(d) Activities conducted,-0.01,(e) Specific type,0,Activities per Region
+specific_type_activity,(e) Specific type,-0.01,(f) Total Expenditures,0,Activities per Region
 total_expenditures,(f) Total Expenditures,-0.01,Bottom Right Corner,0,Activities per Region
-org_name,Top Left Corner,0,(b) IRS code,-0.01,Grants to Organizations Outside the United States
-irs_code,(b) IRS code,-0.01,(c) Region,-0.05,Grants to Organizations Outside the United States
-region,(c) Region,-0.05,(d) Purpose,-0.02,Grants to Organizations Outside the United States
-grant_purpose,(d) Purpose,-0.02,(e) Amount,-0.01,Grants to Organizations Outside the United States
-amount_cash,(e) Amount,-0.01,(f) Manner,-0.03,Grants to Organizations Outside the United States
-manner_cash,(f) Manner,-0.03,(g) Amount,-0.01,Grants to Organizations Outside the United States
-amount_noncash,(g) Amount,-0.01,(h) Description,-0.01,Grants to Organizations Outside the United States
-desc_noncash,(h) Description,-0.01,(i) Method,-0.01,Grants to Organizations Outside the United States
+org_name,Top Left Corner,-0.01,(b) IRS code,0,Grants to Organizations Outside the United States
+irs_code,(b) IRS code,-0.01,(c) Region,0,Grants to Organizations Outside the United States
+region,(c) Region,-0.05,(d) Purpose,0,Grants to Organizations Outside the United States
+grant_purpose,(d) Purpose,-0.01,(e) Amount,0,Grants to Organizations Outside the United States
+amount_cash,(e) Amount,-0.01,(f) Manner,0,Grants to Organizations Outside the United States
+manner_cash,(f) Manner,-0.02,(g) Amount,0,Grants to Organizations Outside the United States
+amount_noncash,(g) Amount,-0.01,(h) Description,0,Grants to Organizations Outside the United States
+desc_noncash,(h) Description,-0.01,(i) Method,0,Grants to Organizations Outside the United States
 method_valuation,(i) Method,-0.01,Bottom Right Corner,0,Grants to Organizations Outside the United States
-type_of_grant_assistance,Top Left Corner,0,(b) Region,-0.03,Grants to Individuals Outside the United States
-region,(b) Region,-0.03,(c) Number of recipients,-0.01,Grants to Individuals Outside the United States
-number_recipients,(c) Number of recipients,-0.01,(d) Amount,-0.01,Grants to Individuals Outside the United States
-amount_cash_grant,(d) Amount,-0.01,(e) Manner,-0.02,Grants to Individuals Outside the United States
-manner_cash_disbursement,(e) Manner,-0.02,(f) Amount,-0.01,Grants to Individuals Outside the United States
-amount_noncash_assistance,(f) Amount,-0.01,(g) Description,-0.01,Grants to Individuals Outside the United States
-desc_noncash_assistance,(g) Description,-0.01,(h) Method,-0.05,Grants to Individuals Outside the United States
-method_valuation,(h) Method,-0.05,Bottom Right Corner,0,Grants to Individuals Outside the United States
+type_of_grant_assistance,Top Left Corner,0,(b) Region,0,Grants to Individuals Outside the United States
+region,(b) Region,-0.05,(c) Number of recipients,0,Grants to Individuals Outside the United States
+number_recipients,(c) Number of recipients,-0.01,(d) Amount,0,Grants to Individuals Outside the United States
+amount_cash_grant,(d) Amount,-0.01,(e) Manner,0,Grants to Individuals Outside the United States
+manner_cash_disbursement,(e) Manner,-0.02,(f) Amount,0,Grants to Individuals Outside the United States
+amount_noncash_assistance,(f) Amount,-0.01,(g) Description,0,Grants to Individuals Outside the United States
+desc_noncash_assistance,(g) Description,-0.01,(h) Method,0,Grants to Individuals Outside the United States
+method_valuation,(h) Method,-0.01,Bottom Right Corner,0,Grants to Individuals Outside the United States

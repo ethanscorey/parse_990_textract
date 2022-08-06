@@ -16,14 +16,20 @@ logger = setup_logger(__name__, config)
 @dataclasses.dataclass
 class BoundingBox:
     left: int
+    left_delta: int
     top: int
+    top_delta: int
     right: int
+    right_delta: int
     bottom: int
+    bottom_delta: int
 
     def get_text_in_box(self, text, page_no):
         text_in_box = text.loc[
-            text["Top"].between(self.top, self.bottom)
-            & text["Left"].between(self.left, self.right)
+            (text["Left"] > self.left + self.left_delta)
+            & (text["Top"] > self.top + self.top_delta)
+            & text["Right"].between(self.left, self.right + self.right_delta)
+            & text["Bottom"].between(self.top, self.bottom + self.bottom_delta)
             & (text["Page"] == page_no),
             "Text"
         ].agg(lambda x: " ".join(x.values))
@@ -53,10 +59,7 @@ class Extractor:
             )
         if not any(words_in_box):
             return ""
-        if "|" in self.regex.pattern:
-            result = get_best_match(words_in_box, self.regex, "NO MATCH")
-        else:
-            result = get_regex(words_in_box, self.regex, 1, "NO MATCH")
+        result = get_regex(words_in_box, self.regex, "match", "NO MATCH")
         if result == "NO MATCH":
             logger.info(f"No match for {self.name} in {words_in_box}")
             return ""
@@ -94,7 +97,7 @@ class TableExtractor:
                 "Top", "Top_Default",
             ) + self.bottom_delta
         except KeyError:
-            return .8
+            return .99
         
     def get_index_col_span(self):
         return (
@@ -108,16 +111,16 @@ class TableExtractor:
             ),
         )
     
-    def get_col_span(self, col_left, left_delta, col_right, right_delta):
+    def get_col_span(self, col_left, col_right):
         col_span = (
             get_coordinate(
                 self.tablemap, col_left,
                 "Left", "Left_Default"
-            ) + left_delta,
+            ),
             get_coordinate(
                 self.tablemap, col_right,
                 "Left", "Left_Default"
-            ) + right_delta,
+            ),
         )
         return col_span
     
@@ -133,8 +136,8 @@ class TableExtractor:
                 self.table_top, self.table_bottom
             ),
             "Top"
-        ].sort_values().reset_index(drop=True) - self.row_margin
-        row_bottoms =  row_tops
+        ].sort_values().reset_index(drop=True)
+        row_bottoms =  row_tops - self.row_margin
         row_intervals = pd.DataFrame(
             {
                 "row_top": row_tops,
@@ -145,15 +148,14 @@ class TableExtractor:
     
     def extract_rows(self, words, page):
         rows = list(
-                self.get_row_spans(words, page).apply(
+                row := self.get_row_spans(words, page).apply(
                     lambda row: self.extract_row(words, page, (row["row_top"], row["row_bottom"])).values,
                     axis=1,
-                ).values 
+                ).values
             )
-        if rows:
-            logger.debug(f"ROWS: {rows}")
-            logger.debug(f"FIELDS: {self.fields}")
-            return pd.DataFrame(rows, columns=self.fields)
+        non_empty_rows = [row for row in rows if row.any()]
+        if non_empty_rows:
+            return pd.DataFrame(non_empty_rows, columns=self.fields)
         return pd.NA
         
     def extract_row(self, words, page, row_span):
@@ -167,13 +169,17 @@ class TableExtractor:
 
     def get_cell_value(self, words, page, field, row_span):
         col_span = self.get_col_span(
-            field["col_left"], field["left_delta"],
-            field["col_right"], field["right_delta"],
+            field["col_left"], field["col_right"]
         )
+        row_width = row_span[1] - row_span[0]
         bounding_box = BoundingBox(
             left=col_span[0],
+            left_delta=field["left_delta"],
             top=row_span[0],
+            top_delta=-0.1*row_width,
             right=col_span[1],
+            right_delta=field["right_delta"],
             bottom=row_span[1],
+            bottom_delta=0.1*row_width,
         )
         return bounding_box.get_text_in_box(words, page)

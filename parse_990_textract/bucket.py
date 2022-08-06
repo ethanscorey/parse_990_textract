@@ -88,11 +88,17 @@ def open_df(bucket, job_id, prefix="textract-output"):
             "RowSpan",
         ]
     ).assign(
+        Polygon=lambda df: df["Geometry"].map(lambda x: x["Polygon"]),
         Height=lambda df: df["Geometry"].map(lambda x: x["BoundingBox"]["Height"]),
         Left=lambda df: df["Geometry"].map(lambda x: x["BoundingBox"]["Left"]),
         Top=lambda df: df["Geometry"].map(lambda x: x["BoundingBox"]["Top"]),
+        Right=lambda df: df["Polygon"].map(
+            lambda polygon: max(corner["X"] for corner in polygon)
+        ),
+        Bottom=lambda df: df["Polygon"].map(
+            lambda polygon: max(corner["Y"] for corner in polygon)
+        ),
         Width=lambda df: df["Geometry"].map(lambda x: x["BoundingBox"]["Width"]),
-        Polygon=lambda df: df["Geometry"].map(lambda x: x["Polygon"]),
         Children=lambda df: df["Relationships"].map(lambda x: x[0]["Ids"] if x is not None else x),
         Line_No=lambda df: pd.qcut(df["Top"], 100, labels=list(range(100))).astype(int),
         File=job_id,

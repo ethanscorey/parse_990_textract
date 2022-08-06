@@ -28,9 +28,9 @@ def handler(event, context):
     schedule_f_table_extractor_df = pd.read_csv("schedule_f_table_extractors.csv")
     schedule_f_row_extractor_df = pd.read_csv("schedule_f_row_extractors.csv")
 
-    PART_I_HEADER = r"\(a\) Region\s*\(b\)\s*N|Schedule F,? Part I\b"
-    PART_II_HEADER = r"\([cC]\) Region\s*\(d\)\s*P|Schedule F,? Part II\b"
-    PART_III_HEADER = r"\(b\) Region\s*\(c\)\s*N|Schedule F,? Part III\b"
+    PART_I_HEADER = r"\(a\)\s*Region|\(d\)\s*Activities|\(e\)\s*If activity|\(f\)Total expenditures"
+    PART_II_HEADER = r"\(b\)\s*IRS code|\(c\)\s*Region|\(d\)\s*Purpose|\(f\)\s*Manner|\(h\)\s*Description"
+    PART_III_HEADER = r"\(b\)\s*Region|\(e\)\s*Manner of cash|\(h\)\s*Method of va"
     PART_I_TABLE_NAME = "Activities per Region"
     PART_II_TABLE_NAME = r"Grants to Organizations Outside the United States"
     PART_III_TABLE_NAME = "Grants to Individuals Outside the United States"
@@ -50,6 +50,7 @@ def handler(event, context):
         words, lines, roadmap, extractor_df, page_map
     )
     row["file"] = event.get("pdf_key")
+    row["job_id"] = event.get("textract_job_id")
     row = clean_filing(row.to_frame().T)
 
     part_i_table = extract_table_data(
@@ -59,6 +60,7 @@ def handler(event, context):
     )
     if part_i_table is not None:
         part_i_table["file"] = event.get("pdf_key")
+        part_i_table["job_id"] = event.get("textract_job_id")
         part_i_table = clean_f_i(part_i_table)
         part_i_table = part_i_table.to_dict()
 
@@ -69,6 +71,7 @@ def handler(event, context):
     )
     if part_ii_table is not None:
         part_ii_table["file"] = event.get("pdf_key")
+        part_ii_table["job_id"] = event.get("textract_job_id")
         part_ii_table = clean_f_ii(part_ii_table)
         part_ii_table = part_ii_table.to_dict()
 
@@ -79,6 +82,7 @@ def handler(event, context):
     )
     if part_iii_table is not None:
         part_iii_table["file"] = event.get("pdf_key")
+        part_iii_table["job_id"] = event.get("textract_job_id")
         part_iii_table = clean_f_iii(part_iii_table)
         part_iii_table = part_iii_table.to_dict()
     

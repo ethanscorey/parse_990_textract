@@ -4,7 +4,7 @@ Item D,Employer,0.71,0.11,Page 1,0.1,0.1
 Item E,Te[tl][ae]phone,0.81,0.17,Page 1,0.2,0.1
 Item F,Name.+fficer,0.14,0.22,Page 1,0.1,0.1
 Item G,"Gross re\w{3,}",0.71,0.19,Page 1,0.1,0.1
-Item H,H\(a\),0.63,0.22,Page 1,0.09,0.1
+Item H,H\(a\),0.63,0.22,Page 1,0.2,0.1
 Item I,Tax\W*exempt [se]tatu[es],0.02,0.25,Page 1,0.2,0.1
 Item J,Website|J W\w+,0.02,0.26,Page 1,0.09,0.2
 Item K,Form of org|Type of org,0.02,0.28,Page 1,0.09,0.2
@@ -36,16 +36,16 @@ Item M,domici[tl]e,0.71,0.28,Page 1,0.2,0.2
 "Part I, Item 22",N[eao]t\W*assets,0.07,0.8,Page 1,0.1,0.15
 Current Year,^(?:Prior Year)?\s*Current Y\w{2}r\s*$,0.79,0.46,Page 1,0.1,0.15
 End of Year,End of Y\w{2}r,0.79,0.66,Page 1,0.1,0.2
-Beginning of Current Year,Beginning of Current Year,0.65,0.71,Page 1,0.1,0.15
+Beginning of Current Year,Beginning of (?:Current )?Year,0.65,0.71,Page 1,0.1,0.15
 Signature Block,Signature Block,0.1,0.72,Page 1,0.1,0.2
 "Part IX, Item 1","assistance to domestic org|See Part IV, line 21",0.1,0.12,Page 10,0.1,0.1
 "Part IX, Item 2","Part IV[,.] [flI]ine 22|domestic individuals",0.1,0.17,Page 10,0.1,0.1
-"Part IX, Item 3",assistance to for,0.1,0.19,Page 10,0.1,0.1
+"Part IX, Item 3",assistance to for|outside the,0.1,0.19,Page 10,0.1,0.1
 "Part IX, Item 4",Benefits paid to or for members\s*$,0.1,0.23,Page 10,0.1,0.1
 "Part IX, Item 5",Compensation of current of,0.1,0.25,Page 10,0.1,0.1
 "Part IX, Item 6",Compensation not,0.1,0.28,Page 10,0.1,0.1
 "Part IX, Item 7",Other sal,0.1,0.32,Page 10,0.1,0.1
-"Part IX, Item 8",Pension plan acc,0.1,0.34,Page 10,0.1,0.1
+"Part IX, Item 8",Pension plan,0.1,0.34,Page 10,0.1,0.1
 "Part IX, Item 9",Other employee benefits,0.1,0.37,Page 10,0.1,0.1
 "Part IX, Item 10",Payroll taxes,0.1,0.38,Page 10,0.1,0.1
 "Part IX, Item 11a",a\s*Management,0.1,0.41,Page 10,0.1,0.1
@@ -73,14 +73,14 @@ Signature Block,Signature Block,0.1,0.72,Page 1,0.1,0.2
 "Part IX, Item 24d",^d(?:\s|$),0.1,0.85,Page 10,0.1,0.1
 "Part IX, Item 24e",^e(?:\s|$),0.1,0.86,Page 10,0.1,0.1
 "Part IX, Item 25",Total functional,0.1,0.87,Page 10,0.1,0.1
-"Part IX, Item 26",Joint c,0.1,0.89,Page 10,0.1,0.1
+"Part IX, Item 26",Joint [cC],0.1,0.89,Page 10,0.1,0.1
 Total expenses,^\(A\)$,0.49,0.1,Page 10,0.1,0.1
 Program service expenses,^\(B\)$,0.62,0.1,Page 10,0.1,0.1
 Management and general expenses,^\([Cc]\)$,0.75,0.1,Page 10,0.1,0.1
 Fundraising expenses,^\(D\)$,0.88,0.1,Page 10,0.1,0.1
 "Schedule F, Part I, Item 3a",^3a Sub,0.01,0.8,"Schedule F, Page 1",0.1,0.6
 "Schedule F, Part I, Item 3b",^b Total,0.01,0.82,"Schedule F, Page 1",0.1,0.6
-"Schedule F, Part I, Item 3c",^[cC] Totals,0.01,0.86,"Schedule F, Page 1",0.1,0.6
+"Schedule F, Part I, Item 3c",^[cC]?\s*Totals,0.01,0.86,"Schedule F, Page 1",0.1,0.6
 (b) Number of offices,\(b\) Number,0.27,0.51,"Schedule F, Page 1",0.1,0.6
 (c) Number of employees,\([cC]\) Number,0.38,0.51,"Schedule F, Page 1",0.1,0.6
 (d) Activities conducted,\(d\) Act,0.49,0.51,"Schedule F, Page 1",0.1,0.6

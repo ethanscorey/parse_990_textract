@@ -57,10 +57,14 @@ def create_bounding_box(
     bottom_delta,
 ):
     return BoundingBox(
-        left=get_coordinate(roadmap, left_key, "Left", "Left_Default") + left_delta,
-        top=get_coordinate(roadmap, top_key, "Top", "Top_Default") + top_delta,
-        right=get_coordinate(roadmap, right_key, "Left", "Left_Default") + right_delta,
-        bottom=get_coordinate(roadmap, bottom_key, "Top", "Top_Default") + bottom_delta,
+        left=get_coordinate(roadmap, left_key, "Left", "Left_Default"),
+        left_delta=left_delta,
+        top=get_coordinate(roadmap, top_key, "Top", "Top_Default"),
+        top_delta=top_delta,
+        right=get_coordinate(roadmap, right_key, "Left", "Left_Default"),
+        right_delta=right_delta,
+        bottom=get_coordinate(roadmap, bottom_key, "Top", "Top_Default"),
+        bottom_delta=bottom_delta,
     )
 
 
