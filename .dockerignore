@@ -1,3 +1,5 @@
-__pycache__
-*.ipynb
-missing_revenue.csv
+*
+!parse_990_textract/*.py
+!requirements.txt
+!**/*.csv
+test_data.csv

@@ -46,7 +46,7 @@ def get_coordinate(roadmap, index, col, default):
     value = roadmap.at[index, col]
     if pd.isna(value):
         value = roadmap.loc[index, default]
-    return trunc_num(value, 2)
+    return value
 
 
 def clean_num(text: str) -> str:

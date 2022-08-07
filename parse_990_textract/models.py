@@ -26,10 +26,14 @@ class BoundingBox:
 
     def get_text_in_box(self, text, page_no):
         text_in_box = text.loc[
-            (text["Left"] > self.left + self.left_delta)
-            & (text["Top"] > self.top + self.top_delta)
-            & text["Right"].between(self.left, self.right + self.right_delta)
-            & text["Bottom"].between(self.top, self.bottom + self.bottom_delta)
+            text["Midpoint_X"].between(
+                self.left + self.left_delta, 
+                self.right + self.right_delta
+            )
+            & text["Midpoint_Y"].between(
+                self.top + self.top_delta,
+                self.bottom + self.bottom_delta
+            )
             & (text["Page"] == page_no),
             "Text"
         ].agg(lambda x: " ".join(x.values))

@@ -98,17 +98,12 @@ def open_df(bucket, job_id, prefix="textract-output"):
         Bottom=lambda df: df["Polygon"].map(
             lambda polygon: max(corner["Y"] for corner in polygon)
         ),
+        Midpoint_X=lambda df: (df["Left"] + df["Right"]) / 2,
+        Midpoint_Y=lambda df: (df["Top"] + df["Bottom"]) / 2,
         Width=lambda df: df["Geometry"].map(lambda x: x["BoundingBox"]["Width"]),
         Children=lambda df: df["Relationships"].map(lambda x: x[0]["Ids"] if x is not None else x),
         Line_No=lambda df: pd.qcut(df["Top"], 100, labels=list(range(100))).astype(int),
         File=job_id,
-    ).drop(
-        columns=[
-            "Confidence",
-            "PageClassification",
-            "Geometry",
-            "Relationships",
-        ]
     ).sort_values(
         by=["File", "Page", "Line_No", "Left"]
     )

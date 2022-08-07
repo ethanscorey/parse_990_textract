@@ -3,13 +3,13 @@ Item C,Name.+zation,0.15,0.11,Page 1,0.1,0.1
 Item D,Employer,0.71,0.11,Page 1,0.1,0.1
 Item E,Te[tl][ae]phone,0.81,0.17,Page 1,0.2,0.1
 Item F,Name.+fficer,0.14,0.22,Page 1,0.1,0.1
-Item G,"Gross re\w{3,}",0.71,0.19,Page 1,0.1,0.1
+Item G,"Gross [rR]e\w{3,}",0.71,0.19,Page 1,0.1,0.1
 Item H,H\(a\),0.63,0.22,Page 1,0.2,0.1
 Item I,Tax\W*exempt [se]tatu[es],0.02,0.25,Page 1,0.2,0.1
 Item J,Website|J W\w+,0.02,0.26,Page 1,0.09,0.2
-Item K,Form of org|Type of org,0.02,0.28,Page 1,0.09,0.2
-Item L,Y[eo]ar of formation,0.54,0.28,Page 1,0.2,0.2
-Item M,domici[tl]e,0.71,0.28,Page 1,0.2,0.2
+Item K,Form of [oO]rg|Type of [oO]rg,0.02,0.28,Page 1,0.09,0.2
+Item L,Y[eo]ar of [Ff]ormation,0.54,0.28,Page 1,0.2,0.2
+Item M,[dD]omici[tl]e,0.71,0.28,Page 1,0.2,0.2
 "Part I, Item 1",mission or most,0.1,0.3,Page 1,0.1,0.15
 "Part I, Item 2",organization discontinued,0.21,0.36,Page 1,0.2,0.2
 "Part I, Item 3",Number of voting,0.07,0.37,Page 1,0.1,0.15
@@ -27,13 +27,14 @@ Item M,domici[tl]e,0.71,0.28,Page 1,0.2,0.2
 "Part I, Item 14",Benefits paid,0.07,0.63,Page 1,0.1,0.1
 "Part I, Item 15",Salaries.+other,0.07,0.65,Page 1,0.1,0.15
 "Part I, Item 16a",Profession[ae]l fundraising,0.07,0.67,Page 1,0.1,0.15
-"Part I, Item 16b",Total fundraising,0.07,0.69,Page 1,0.1,0.15
+"Part I, Item 16b",b\s*Total|Total fundraising,0.07,0.69,Page 1,0.1,0.15
 "Part I, Item 17",Other expenses|17 Oth,0.07,0.71,Page 1,0.1,0.15
 "Part I, Item 18","To.{,5}expenses",0.07,0.73,Page 1,0.1,0.15
 "Part I, Item 19",Revenue less,0.07,0.74,Page 1,0.1,0.15
 "Part I, Item 20",Total assets,0.07,0.76,Page 1,0.1,0.15
 "Part I, Item 21",Total\s*(?:li|[hR])abilities,0.07,0.78,Page 1,0.1,0.15
 "Part I, Item 22",N[eao]t\W*assets,0.07,0.8,Page 1,0.1,0.15
+Prior Year,Prior Year,0.5,0.46,Page 1,0.2,0.15
 Current Year,^(?:Prior Year)?\s*Current Y\w{2}r\s*$,0.79,0.46,Page 1,0.1,0.15
 End of Year,End of Y\w{2}r,0.79,0.66,Page 1,0.1,0.2
 Beginning of Current Year,Beginning of (?:Current )?Year,0.65,0.71,Page 1,0.1,0.15
@@ -86,8 +87,8 @@ Fundraising expenses,^\(D\)$,0.88,0.1,Page 10,0.1,0.1
 (d) Activities conducted,\(d\) Act,0.49,0.51,"Schedule F, Page 1",0.1,0.6
 (e) Specific type,\([aeo]\) If,0.65,0.51,"Schedule F, Page 1",0.1,0.6
 (f) Total expenditures,\(f\) Tota,0.84,0.51,"Schedule F, Page 1",0.1,0.6
-"Schedule F, Part II, Item 2",2 Enter,0,0.78,"Schedule F, Page 2",0.1,0.6
-"Schedule F, Part II, Item 3",3 Enter,0,0.9,"Schedule F, Page 2",0.1,0.6
+"Schedule F, Part II, Item 2",recipient organizations listed,0,0.78,"Schedule F, Page 2",0.1,0.6
+"Schedule F, Part II, Item 3",number of other orga,0,0.9,"Schedule F, Page 2",0.1,0.6
 (a) Name of organization,\(a\) Name,0.03,0.2,"Schedule F, Page 2",0.1,0.6
 (b) IRS code,\(b\) IRS,0.12,0.2,"Schedule F, Page 2",0.1,0.6
 (c) Region,\([cC]\) Region,0.23,0.2,"Schedule F, Page 2",0.1,0.6

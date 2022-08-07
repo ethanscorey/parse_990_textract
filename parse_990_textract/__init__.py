@@ -8,7 +8,9 @@ import pandas as pd
 from .bucket import open_df
 from .filing import create_roadmap, extract_from_roadmap
 from .parse import find_pages
-from .postprocessing import clean_filing, clean_f_i, clean_f_ii, clean_f_iii
+from .postprocessing import (
+    clean_filing, clean_f_i, clean_f_ii, clean_f_iii, postprocess
+)
 from .setup import load_extractor_df
 from .table import extract_table_data
 from .utils import setup_config, setup_logger
@@ -21,6 +23,9 @@ logger = setup_logger(__name__, config)
 def handler(event, context):
     logger.info("## EVENT DATA")
     logger.info(event)
+
+    job_id = event.get("job_id")
+    pdf_key = event.get("pdf_key")
 
     extractor_df = load_extractor_df("990_extractors.csv")
     roadmap_df = pd.read_csv("990_roadmap.csv")
@@ -42,6 +47,13 @@ def handler(event, context):
     words = data.loc[data["BlockType"] == "WORD"]
     pages = lines.groupby("Page")
     page_map = find_pages(lines)
+    if lines.loc[
+        (lines["Page"] == page_map["Page 1"])
+        & lines["Text"].str.contains(
+            "Net rental income|Direct public|IRS label"
+        )
+    ].any():
+        raise ValueError("Incorrect form version.")
     roadmap = create_roadmap(
         lines, roadmap_df, page_map
     )
@@ -49,19 +61,15 @@ def handler(event, context):
     row = extract_from_roadmap(
         words, lines, roadmap, extractor_df, page_map
     )
-    row["file"] = event.get("pdf_key")
-    row["job_id"] = event.get("textract_job_id")
-    row = clean_filing(row.to_frame().T)
+    row = postprocess(row, job_id, pdf_key, clean_filing) 
 
     part_i_table = extract_table_data(
         pages, lines, words, PART_I_HEADER, PART_I_TABLE_NAME,
         schedule_f_tablemap_df, schedule_f_table_extractor_df,
         schedule_f_row_extractor_df,
     )
+    part_i_table = postprocess(part_i_table, job_id, pdf_key, clean_f_i)
     if part_i_table is not None:
-        part_i_table["file"] = event.get("pdf_key")
-        part_i_table["job_id"] = event.get("textract_job_id")
-        part_i_table = clean_f_i(part_i_table)
         part_i_table = part_i_table.to_dict()
 
     part_ii_table = extract_table_data(
@@ -69,10 +77,8 @@ def handler(event, context):
         schedule_f_tablemap_df, schedule_f_table_extractor_df,
         schedule_f_row_extractor_df,
     )
+    part_ii_table = postprocess(part_ii_table, job_id, pdf_key, clean_f_ii)
     if part_ii_table is not None:
-        part_ii_table["file"] = event.get("pdf_key")
-        part_ii_table["job_id"] = event.get("textract_job_id")
-        part_ii_table = clean_f_ii(part_ii_table)
         part_ii_table = part_ii_table.to_dict()
 
     part_iii_table = extract_table_data(
@@ -80,10 +86,8 @@ def handler(event, context):
         schedule_f_tablemap_df, schedule_f_table_extractor_df,
         schedule_f_row_extractor_df,
     )
+    part_iii_table = postprocess(part_iii_table, job_id, pdf_key, clean_f_iii)
     if part_iii_table is not None:
-        part_iii_table["file"] = event.get("pdf_key")
-        part_iii_table["job_id"] = event.get("textract_job_id")
-        part_iii_table = clean_f_iii(part_iii_table)
         part_iii_table = part_iii_table.to_dict()
     
     return {
