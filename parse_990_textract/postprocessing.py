@@ -25,7 +25,7 @@ def clean_df(df, non_numeric_columns):
         ein=lambda df: df["split_pdf_key"].map(lambda x: x[1]),
         year=lambda df: df["split_pdf_key"].map(lambda x: x[3]),
         filing_id=lambda df: df["ein"] + "_" + df["year"],
-    )
+    ).drop(columns=["split_pdf_key"])
 
 
 

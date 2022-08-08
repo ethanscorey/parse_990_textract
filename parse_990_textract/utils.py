@@ -61,3 +61,24 @@ def clean_num(text: str) -> str:
         else:
             return re.sub(r"[()]", "", cleaned)
     return ""
+
+
+def cluster_words(words, tolerance, attribute):
+    if (tolerance == 0) or (words.shape[0] < 2):
+     return [
+         [word] for (idx, word)
+         in words.sort_values(by=attribute).iterrows()
+     ]
+    groups = []
+    sorted_words = words.sort_values(by=attribute)
+    current_group = [sorted_words.iloc[0]]
+    last = sorted_words.iloc[0][attribute]
+    for idx, word in sorted_words.iloc[1:].iterrows():
+        if word[attribute] <= (last + tolerance):
+            current_group.append(word)
+        else:
+            groups.append(current_group)
+            current_group = [word]
+        last = word[attribute]
+    groups.append(current_group)
+    return [pd.DataFrame(group) for group in groups]

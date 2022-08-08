@@ -51,7 +51,8 @@ def handler(event, context):
         (lines["Page"] == page_map["Page 1"])
         & lines["Text"].str.contains(
             "Net rental income|Direct public|IRS label"
-        )
+        ),
+        "Page"
     ].any():
         raise ValueError("Incorrect form version.")
     roadmap = create_roadmap(
