@@ -35,6 +35,13 @@ jobs:
                   docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
+            - name: Update Lambda function code
+              env:
+                  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+                  IMAGE_TAG: ${{ github.sha  }}
+              run: aws lambda update-function-code --function-name {{ secrets.AWS_FUNCTION_NAME }} --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
             - name: Log out of Amazon ECR
               if: always()
               run: docker logout ${{ steps.login-ecr.outputs.registry }}
