@@ -24,7 +24,8 @@ def handler(event, context):
     logger.info("## EVENT DATA")
     logger.info(event)
 
-    job_id = event.get("job_id")
+    bucket_name = event.get("bucket_name")
+    job_id = event.get("textract_job_id")
     pdf_key = event.get("pdf_key")
 
     extractor_df = load_extractor_df("990_extractors.csv")
@@ -40,8 +41,8 @@ def handler(event, context):
     PART_II_TABLE_NAME = r"Grants to Organizations Outside the United States"
     PART_III_TABLE_NAME = "Grants to Individuals Outside the United States"
 
-    bucket = boto3.resource("s3").Bucket(event.get("bucket_name"))
-    data = open_df(bucket, event.get("textract_job_id"))
+    bucket = boto3.resource("s3").Bucket(bucket_name)
+    data = open_df(bucket, job_id)
 
     lines = data.loc[data["BlockType"] == "LINE"]
     words = data.loc[data["BlockType"] == "WORD"]
@@ -100,7 +101,8 @@ def handler(event, context):
             "part_iii_data": json.dumps(part_iii_table),
             "ein": event.get("ein"),
             "doc_type": event.get("doc_type"),
-            "pdf_key": event.get("pdf_key"),
+            "pdf_key": pdf_key,
+            "bucket_name": bucket_name,
             "table_name": event.get("table_name"),
         }
     }
