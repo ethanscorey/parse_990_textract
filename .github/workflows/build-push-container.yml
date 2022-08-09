@@ -21,7 +21,7 @@ jobs:
               uses: aws-actions/amazon-ecr-login@v1
 
             - name: Build, tag, and push image to Amazon ECR
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
               env:
                   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
                   ECR_REPOSITORY: parse_990_textract
