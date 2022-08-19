@@ -7,6 +7,8 @@ import boto3
 from dotenv import dotenv_values
 import pandas as pd
 
+from .utils import rotate_pages
+
 
 config = dotenv_values(os.getenv("ENVFILE", ".env.local"))
 logger = logging.getLogger(__name__)
@@ -73,7 +75,7 @@ def get_records(
 def open_df(bucket, job_id, prefix="textract-output"):
     logger.info(f"Opening dataframe for job {job_id} from bucket {bucket}")
     records = get_records(bucket, job_id, prefix)
-    return pd.DataFrame.from_records(
+    df = pd.DataFrame.from_records(
         records,
         index="Id",
         exclude=[
@@ -104,6 +106,7 @@ def open_df(bucket, job_id, prefix="textract-output"):
         Children=lambda df: df["Relationships"].map(lambda x: x[0]["Ids"] if x is not None else x),
         Line_No=lambda df: pd.qcut(df["Top"], 100, labels=list(range(100))).astype(int),
         File=job_id,
-    ).sort_values(
-        by=["File", "Page", "Line_No", "Left"]
+    )
+    return rotate_pages(df).sort_values(
+        by=["Page", "Line_No", "Left"]
     )

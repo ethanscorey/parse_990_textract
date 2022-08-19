@@ -2,10 +2,10 @@
 (a) Region,(?<!per)\s*Region,0,0.05,1,0.45
 (b) Number of offices,\(b\)\s*Nu|offices in the,0,0.05,1,0.45
 (c) Number of employees,\(c\)\s*Nu|employees,0,0.05,1,0.45
-(d) Activities conducted,\(d\)\s*Act,0,0.05,1,0.45
+(d) Activities conducted,conducted,0,0.05,1,0.45
 (e) Specific type,\(e\)\s*If|activity listed,0,0.05,1,0.45
 (f) Total Expenditures,\(f\)\s*Total,0,0.05,1,0.45
-"Schedule F, Part I, Item 3a",3a\s*Sub|Form 990 Schedule F Part II,0,0,1,1
+"Schedule F, Part I, Item 3a",3a\s*Sub|Form 990 Schedule F Part II|For Paperwork|For Privacy,0,0,1,1
 (a) Name of organization,\(a\)\s*Na,0,0.05,1,0.45
 (b) IRS code,\(b\)\s*IRS,0,0.05,1,0.45
 (c) Region,\(c\)\s*Region,0,0.05,1,0.45

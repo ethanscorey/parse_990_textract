@@ -21,6 +21,10 @@ def setup_logger(logger_name, config, log_level_var="PARSE_990_TEXTRACT_OUTPUT_L
     return logger
 
 
+config = setup_config()
+logger = setup_logger(__name__, config)
+
+
 def trunc_num(value, places):
     return math.trunc(value * 10**places) / 10**places
 
@@ -49,9 +53,9 @@ def get_coordinate(roadmap, index, col, default):
     return value
 
 
-def clean_num(text: str) -> str:
-    if text:
-        fix_zeroes = re.sub(r"[oO]", "0", text.strip())
+def clean_num(text) -> str:
+    if re.search(r"^[\doOliIZS ,$.()-]+$", str(text)):
+        fix_zeroes = re.sub(r"[oO]", "0", str(text).strip())
         fix_ones = re.sub(r"[liI]", "1", fix_zeroes)
         fix_twos = re.sub("Z", "2", fix_ones)
         fix_fives = re.sub(r"S", "5", fix_twos)
@@ -60,6 +64,8 @@ def clean_num(text: str) -> str:
             return f"-{cleaned[1:-1]}"
         else:
             return re.sub(r"[()]", "", cleaned)
+    if text:
+        logger.info(str(text))
     return ""
 
 
@@ -82,3 +88,87 @@ def cluster_words(words, tolerance, attribute):
         last = word[attribute]
     groups.append(current_group)
     return [pd.DataFrame(group) for group in groups]
+
+
+def get_cluster_coords(cluster):
+    cluster_coords = {
+        "Left": cluster["Left"].min(),
+        "Right": cluster["Right"].max(),
+        "Height": cluster["Height"].max(),
+        "Midpoint_X": cluster["Midpoint_X"].median(),
+        "Midpoint_Y": cluster["Midpoint_Y"].median(),
+        "Top": cluster["Top"].min(),
+        "Bottom": cluster["Bottom"].min(),
+    }
+    cluster_coords["Width"] = cluster_coords["Right"] - cluster_coords["Left"]
+    return cluster_coords
+
+
+def columnize(word_cluster, col_spans):
+    return col_spans.map(
+        lambda span: word_cluster.loc[
+            word_cluster["Left"].between(*span, inclusive="left")
+        ]
+    )
+
+
+def cluster_x(words, tolerance):
+    if (tolerance == 0) or (words.shape[0] < 2):
+        return [
+            [word] for (idx, word)
+            in words.sort_values(by="Left").iterrows()
+        ]
+    groups = []
+    sorted_words = words.sort_values(by="Left")
+    current_group = [sorted_words.iloc[0]]
+    last = sorted_words.iloc[0]["Right"]
+    for idx, word in sorted_words.iloc[1:].iterrows():
+        if word["Left"] <= (last + tolerance):
+            current_group.append(word)
+        else:
+            groups.append(current_group)
+            current_group = [word]
+        last = word["Right"]
+    groups.append(current_group)
+    return [pd.DataFrame(group) for group in groups]
+
+
+def rotate(textract_obj):
+    height = textract_obj["Height"]
+    width = textract_obj["Width"]
+    left = textract_obj["Left"]
+    right = textract_obj["Right"]
+    top = textract_obj["Top"]
+    bottom = textract_obj["Bottom"]
+    midpoint_x = textract_obj["Midpoint_X"]
+    midpoint_y = textract_obj["Midpoint_Y"]
+    new_obj = textract_obj.copy()
+    new_obj["Height"] = width
+    new_obj["Width"] = height
+    new_obj["Left"] = bottom
+    new_obj["Right"] = top
+    new_obj["Top"] = left
+    new_obj["Bottom"] = right
+    new_obj["Midpoint_X"] = midpoint_y
+    new_obj["Midpoint_Y"] = midpoint_x
+    return new_obj
+
+
+def id_rotated_pages(df):
+    return df.loc[
+        df["Height"] > 5*df["Width"],
+        "Page"
+    ].value_counts().index.values
+
+
+def rotate_pages(df):
+    rotated_pages = id_rotated_pages(
+        df.loc[
+            df["BlockType"] == "LINE"
+        ]
+    )
+    return df.mask(
+        df["Page"].isin(rotated_pages),
+        rotate,
+        axis=1
+    )

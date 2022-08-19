@@ -62,12 +62,10 @@ def extract_table_data(
         rows = tablemaps.assign(
             extractor=tablemaps["tablemap"].map(
                 lambda tablemap: TableExtractor(
+                    header_top_label=table["header_top"],
                     top_label=table["table_top"],
-                    top_delta=table["table_top_delta"],
                     bottom_label=table["table_bottom"],
-                    bottom_delta=table["table_bottom_delta"],
                     tablemap=tablemap,
-                    row_extractors=table_row_extractors,
                     fields=table_row_extractors["field"],
                 ),
             ),

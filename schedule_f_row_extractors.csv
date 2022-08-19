@@ -1,9 +1,9 @@
 ﻿field,col_left,left_delta,col_right,right_delta,table
 region,Top Left Corner,0,(b) Number of offices,0,Activities per Region
 number_offices,(b) Number of offices,-0.01,(c) Number of employees,-0.01,Activities per Region
-number_employees,(c) Number of employees,-0.01,(d) Activities conducted,-0.04,Activities per Region
-activities_conducted,(d) Activities conducted,-0.04,(e) Specific type,-0.01,Activities per Region
-specific_type_activity,(e) Specific type,-0.01,(f) Total Expenditures,-0.01,Activities per Region
+number_employees,(c) Number of employees,-0.01,(d) Activities conducted,-0.01,Activities per Region
+activities_conducted,(d) Activities conducted,-0.01,(e) Specific type,-0.06,Activities per Region
+specific_type_activity,(e) Specific type,-0.06,(f) Total Expenditures,-0.01,Activities per Region
 total_expenditures,(f) Total Expenditures,-0.01,Bottom Right Corner,-0.01,Activities per Region
 org_name,Top Left Corner,-0.01,(b) IRS code,0,Grants to Organizations Outside the United States
 irs_code,(b) IRS code,-0.01,(c) Region,0,Grants to Organizations Outside the United States
