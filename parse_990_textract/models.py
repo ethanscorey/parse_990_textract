@@ -4,8 +4,8 @@ import re
 import pandas as pd
 
 from .utils import (
-    cluster_words, cluster_x, columnize, get_best_match, get_coordinate,
-    get_cluster_coords, get_regex, setup_config, setup_logger
+    cluster_words, cluster_x, combine_row, columnize, get_best_match,
+    get_coordinate, get_cluster_coords, get_regex, setup_config, setup_logger
 )
 
 
@@ -120,6 +120,14 @@ class TableExtractor:
         except KeyError:
             self._table_bottom = 1 - self.get_word_delta(words, page)
         return self._table_bottom
+
+    def get_table_left(self, words, page):
+        table_words = self.get_table_words(words, page)
+        return table_words["Left"].min()
+
+    def get_table_right(self, words, page):
+        table_words = self.get_table_words(words, page)
+        return table_words["Right"].min()
         
     def get_table_words(self, words, page):
         table_words = words.loc[
@@ -144,6 +152,7 @@ class TableExtractor:
 
     def get_col_spans(self, words, page):
         header_words = self.get_header_words(words, page)
+        table_words = self.get_table_words(words, page)
         tolerance = header_words["Width"].min()
         x_clusters = cluster_x(header_words, tolerance)
         while len(x_clusters) != self.fields.count():
@@ -152,24 +161,21 @@ class TableExtractor:
             else:
                 tolerance *= 1.05
             x_clusters = cluster_x(header_words, tolerance)
-            
-        midpoints = pd.Series(
-            cluster["Midpoint_X"].median() for cluster in x_clusters
-        )
-        left_bounds = pd.Series(
-            cluster["Left"].min() for cluster in x_clusters[1:]
-        )
-        right_bounds = pd.Series(
-            [cluster["Right"].max() for cluster in x_clusters[:-1]]
-        )
-        offsets = (right_bounds - left_bounds) / 2
-        full_left = pd.concat(
-            [pd.Series([0]), left_bounds + offsets]
-        ).reset_index(drop=True)
-        full_right = pd.concat(
-            [right_bounds - offsets, pd.Series([1])]
-        ).reset_index(drop=True)
-        return full_left.combine(full_right, lambda x, y: (x, y))
+
+        last_cluster_right = pd.concat([header_words, table_words])["Left"].min()
+        left_bounds = []
+        right_bounds = []
+        for cluster in x_clusters:
+            left_bounds.append(last_cluster_right)
+            last_cluster_right = max(
+                cluster["Right"].max()
+                + cluster["Left"].min()
+                - last_cluster_right,
+                cluster["Right"].max()
+            )
+            right_bounds.append(last_cluster_right)
+        col_spans = pd.Series(zip(left_bounds, right_bounds)) 
+        return col_spans
 
     def get_rows(self, words, page):
         table_words = self.get_table_words(words, page)
@@ -186,7 +192,7 @@ class TableExtractor:
         last_col_coords = pd.DataFrame.from_records(
             columnized.map(get_cluster_coords)
         )
-        sum_y_delta = last_col_coords["Height"].max()
+        sum_y_delta = y_tol
         rows = []
         current_row = [columnized]
         
@@ -208,33 +214,15 @@ class TableExtractor:
             )
             sum_y_delta += y_delta
             mean_y_delta = sum_y_delta / (count + 1)
-            min_y_delta = mean_y_delta * 0.5
+            min_y_delta = mean_y_delta * 0.67
             if (delta_cols or (y_delta > y_tol)) and (y_delta > min_y_delta):
-                combined_row = pd.Series([
-                    line.map(
-                        lambda x: x.sort_values(
-                            by="Left"
-                        ).reset_index(drop=True)["Text"].fillna("")
-                    ).agg(
-                        lambda x: " ".join(x.values)
-                    ) + " "
-                    for line in current_row
-                ]).sum().str.strip()
+                combined_row = combine_row(current_row)
                 rows.append(combined_row)
                 current_row = [columnized]
             else:
                 current_row.append(columnized)
             last_col_coords = col_coords
-        combined_row = pd.Series([
-            line.map(
-                lambda x: x.sort_values(
-                    by="Left"
-                ).reset_index(drop=True)["Text"].fillna("")
-            ).agg(
-                lambda x: " ".join(x.values)
-            ) + " "
-            for line in current_row
-        ]).sum().str.strip()
+        combined_row = combine_row(current_row)
         rows.append(combined_row)
         return rows
     

@@ -15,7 +15,7 @@
 (g) Amount,\(g\)\s*Amount,0,0.05,1,0.45
 (h) Description,\(h\)\s*Description,0,0.05,1,0.45
 (i) Method,(?:\([iIl]\))?\s*Method of,0,0.05,1,0.45
-"Schedule F, Part II, Item 2",2\s*Enter,0,0,1,1
+"Schedule F, Part II, Item 2",Enter total,0,0,1,1
 (a) Type,\(a\)\s*Type,0,0.05,1,0.45
 (b) Region,\(b\)\s*Region,0,0.05,1,0.45
 (c) Number of recipients,umber of,0,0.05,1,0.45

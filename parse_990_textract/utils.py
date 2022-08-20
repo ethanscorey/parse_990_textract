@@ -107,7 +107,7 @@ def get_cluster_coords(cluster):
 def columnize(word_cluster, col_spans):
     return col_spans.map(
         lambda span: word_cluster.loc[
-            word_cluster["Left"].between(*span, inclusive="left")
+            word_cluster["Midpoint_X"].between(*span, inclusive="left")
         ]
     )
 
@@ -145,11 +145,11 @@ def rotate(textract_obj):
     new_obj = textract_obj.copy()
     new_obj["Height"] = width
     new_obj["Width"] = height
-    new_obj["Left"] = bottom
-    new_obj["Right"] = top
+    new_obj["Left"] = 1 - bottom
+    new_obj["Right"] = 1 - top
     new_obj["Top"] = left
     new_obj["Bottom"] = right
-    new_obj["Midpoint_X"] = midpoint_y
+    new_obj["Midpoint_X"] = 1 - midpoint_y
     new_obj["Midpoint_Y"] = midpoint_x
     return new_obj
 
@@ -172,3 +172,17 @@ def rotate_pages(df):
         rotate,
         axis=1
     )
+
+
+def combine_row(row):
+    combined_row = pd.Series([
+        line.map(
+            lambda x: x.sort_values(
+                by="Left"
+            ).reset_index(drop=True)["Text"].fillna("")
+        ).agg(
+            lambda x: " ".join(x.values)
+        ) + " "
+        for line in row
+    ]).sum().str.strip()
+    return combined_row
