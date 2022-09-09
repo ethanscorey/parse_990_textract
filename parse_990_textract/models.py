@@ -145,8 +145,8 @@ class TableExtractor:
             return table_words
         self._table_words = words.loc[
             (words["Page"] == page)
-            # Use Midpoint_X to ensure we don't include anything from header
-            & (words["Midpoint_X"] < self.get_table_top(words, page))
+            # Use Midpoint_Y to ensure we don't include anything from header
+            & (words["Midpoint_Y"] > self.get_table_top(words, page))
             & (words["Top"] < self.get_table_bottom(words, page))
         ]
         return self._table_words
