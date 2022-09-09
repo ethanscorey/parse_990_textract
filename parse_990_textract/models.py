@@ -203,9 +203,7 @@ class TableExtractor:
         table_words = self.get_table_words(words, page)
         if not table_words.shape[0]:
             return []
-        y_tol = table_words["Height"].max() * 2
-        x_tol = table_words["Width"].median()
-        sum_y_delta = y_tol
+        y_tol = table_words["Height"].median()
         word_clusters = cluster_words(
             table_words,
             table_words["Height"].min(),
@@ -219,29 +217,44 @@ class TableExtractor:
         )
         rows = []
         current_row = [columnized]
-        
+        top_ws = (
+            last_cluster_coords["Top"].min()
+            - self.get_table_top(words, page)
+        )
+        if top_ws > y_tol:
+            alignment = "BOTTOM"
+        else:
+            alignment = "UNKNOWN"
         for count, cluster in enumerate(word_clusters[1:]):
             columnized = columnize(cluster, col_spans)
             columnized.index = self.fields
             col_coords = pd.DataFrame.from_records(
                 columnized.map(get_cluster_coords)
             )
-            nonempty = col_coords.dropna().index.to_series()
-            last_nonempty = last_col_coords.dropna().index.to_series()
-            delta_cols = (~nonempty.isin(last_nonempty)).any()
             y_delta = (
-                col_coords["Midpoint_Y"].median() 
-                - last_col_coords["Midpoint_Y"].median()
+                col_coords["Top"].min() 
+                - last_col_coords["Bottom"].max()
             )
-            sum_y_delta += y_delta
-            mean_y_delta = sum_y_delta / (count + 2)  # count is zero-indexed
-            min_y_delta = min(mean_y_delta, y_tol)
-            if (delta_cols or (y_delta > y_tol)) and (y_delta > min_y_delta):
+            if y_delta > y_tol:
                 combined_row = combine_row(current_row)
                 rows.append(combined_row)
                 current_row = [columnized]
             else:
-                current_row.append(columnized)
+                nonempty = col_coords.dropna().index.to_series()
+                last_nonempty = last_col_coords.dropna().index.to_series()
+                delta_cols = (~nonempty.isin(last_nonempty)).any()
+                if not delta_cols and (alignment == "UNKNOWN"):
+                    alignment = "TOP"
+                    current_row.append(columnized)
+                elif delta_cols and (alignment == "UNKNOWN"):
+                    alignment = "BOTTOM"
+                    current_row.append(columnized)
+                elif delta_cols and (alignment == "TOP"):
+                    combined_row = combine_row(current_row)
+                    rows.append(combined_row)
+                    current_row = [columnized]
+                else:
+                    current_row.append(columnized)
             last_col_coords = col_coords
         combined_row = combine_row(current_row)
         rows.append(combined_row)
