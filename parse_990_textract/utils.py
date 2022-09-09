@@ -107,7 +107,7 @@ def get_cluster_coords(cluster):
 def columnize(word_cluster, col_spans):
     return col_spans.map(
         lambda span: word_cluster.loc[
-            word_cluster["Midpoint_X"].between(*span, inclusive="left")
+            word_cluster["Left"].between(*span, inclusive="left")
         ]
     )
 
@@ -128,7 +128,7 @@ def cluster_x(words, tolerance):
         else:
             groups.append(current_group)
             current_group = [word]
-        last = word["Right"]
+        last = max((word["Right"], last))
     groups.append(current_group)
     return [pd.DataFrame(group) for group in groups]
 
@@ -155,10 +155,14 @@ def rotate(textract_obj):
 
 
 def id_rotated_pages(df):
-    return df.loc[
-        df["Height"] > 5*df["Width"],
-        "Page"
-    ].value_counts().index.values
+    lines = df.loc[
+        df["BlockType"] == "LINE"
+    ]
+    by_page = lines.groupby("Page")
+    return (
+        by_page["Width"].mean()
+        / by_page["Height"].mean()
+    )[lambda x: x < 0.5].index.values
 
 
 def rotate_pages(df):
@@ -186,3 +190,13 @@ def combine_row(row):
         for line in row
     ]).sum().str.strip()
     return combined_row
+
+
+def find_crossing_right(df, right):
+    return (
+        df.loc[
+            (df["Right"] > right*1.01)
+            & (df["Left"] < right),
+            "Left"
+        ].min()
+    )

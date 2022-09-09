@@ -9,9 +9,11 @@ config = setup_config()
 logger = setup_logger(__name__, config)
 
 
-def create_tablemap(lines, tablemap_df, page):
+def create_tablemap(lines, tablemap_df, page, table_name):
     roadmap = pd.concat(
-        tablemap_df.apply(
+        tablemap_df.loc[
+            tablemap_df["table"] == table_name
+        ].apply(
             lambda row: find_item(
                 row["landmark"], lines, page, row["regex"],
                 row["left_default"], row["top_default"],
@@ -48,7 +50,7 @@ def extract_table_data(
         {
             "page": table_pages,
             "tablemap": table_pages.map(
-                lambda page: create_tablemap(lines, tablemap_df, page).dropna()
+                lambda page: create_tablemap(lines, tablemap_df, page, table_name)
             ),
         }
     )
@@ -67,6 +69,7 @@ def extract_table_data(
                     bottom_label=table["table_bottom"],
                     tablemap=tablemap,
                     fields=table_row_extractors["field"],
+                    field_labels=table_row_extractors["col_left"],
                 ),
             ),
         ).apply(

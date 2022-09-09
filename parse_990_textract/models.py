@@ -4,8 +4,9 @@ import re
 import pandas as pd
 
 from .utils import (
-    cluster_words, cluster_x, combine_row, columnize, get_best_match,
-    get_coordinate, get_cluster_coords, get_regex, setup_config, setup_logger
+    cluster_words, cluster_x, combine_row, columnize, find_crossing_right,
+    get_best_match, get_coordinate, get_cluster_coords, get_regex,
+    setup_config, setup_logger
 )
 
 
@@ -77,6 +78,7 @@ class TableExtractor:
     bottom_label: str
     tablemap: pd.DataFrame
     fields: list[str]
+    field_labels: pd.Series
         
     def get_word_delta(self, words, page):
         word_delta = getattr(self, "_word_delta", None)
@@ -85,7 +87,7 @@ class TableExtractor:
         self._word_delta = words.loc[
             words["Page"] == page,
             "Height"
-        ].min()
+        ].median()
         return self._word_delta
 
     def get_header_top(self, words, page):
@@ -116,31 +118,45 @@ class TableExtractor:
             self._table_bottom = get_coordinate(
                 self.tablemap, self.bottom_label,
                 "Top", "Top_Default",
-            ) + self.get_word_delta(words, page)
+            ) - self.get_word_delta(words, page)
         except KeyError:
             self._table_bottom = 1 - self.get_word_delta(words, page)
         return self._table_bottom
 
     def get_table_left(self, words, page):
+        table_left = getattr(self, "_table_left", None)
+        if table_left is not None:
+            return table_left
         table_words = self.get_table_words(words, page)
-        return table_words["Left"].min()
+        self._table_left = table_words["Left"].min()
+        return self._table_left
 
     def get_table_right(self, words, page):
+        table_right = getattr(self, "_table_right", None)
+        if table_right is not None:
+            return table_right
         table_words = self.get_table_words(words, page)
-        return table_words["Right"].min()
+        self._table_right = table_words["Right"].min()
+        return self._table_right
         
     def get_table_words(self, words, page):
-        table_words = words.loc[
+        table_words  = getattr(self, "_table_words", None)
+        if table_words is not None:
+            return table_words
+        self._table_words = words.loc[
             (words["Page"] == page)
             & words["Midpoint_Y"].between(
                 self.get_table_top(words, page),
                 self.get_table_bottom(words, page)
             )
         ]
-        return table_words
+        return self._table_words
 
     def get_header_words(self, words, page):
-        header_words = words.loc[
+        header_words = getattr(self, "_header_words", None)
+        if header_words is not None:
+            return header_words
+        self._header_words = words.loc[
             (words["Page"] == page)
             & words["Midpoint_Y"].between(
                 self.get_header_top(words, page),
@@ -148,38 +164,48 @@ class TableExtractor:
                 - self.get_word_delta(words, page),
             )
         ]
-        return header_words
+        return self._header_words
 
     def get_col_spans(self, words, page):
+        col_spans = getattr(self, "_col_spans", None)
+        if col_spans is not None:
+            return col_spans
+        init_left = self.field_labels.map(
+            lambda x: get_coordinate(self.tablemap, x, "Left", "Left_Default"),
+        )
+        init_right = pd.concat(
+            [
+                init_left.iloc[1:],
+                pd.Series([1]),
+            ],
+            ignore_index=True,
+        )
+        init_spans = init_left.reset_index(drop=True).combine(
+            init_right, lambda x, y: (x, y), 
+        )
         header_words = self.get_header_words(words, page)
         table_words = self.get_table_words(words, page)
-        tolerance = header_words["Width"].min()
-        x_clusters = cluster_x(header_words, tolerance)
-        while len(x_clusters) != self.fields.count():
-            if len(x_clusters) < self.fields.count():
-                tolerance *= .95
-            else:
-                tolerance *= 1.05
-            x_clusters = cluster_x(header_words, tolerance)
-
-        last_cluster_right = pd.concat([header_words, table_words])["Left"].min()
-        left_bounds = []
-        right_bounds = []
-        for cluster in x_clusters:
-            left_bounds.append(last_cluster_right)
-            last_cluster_right = max(
-                cluster["Right"].max()
-                + cluster["Left"].min()
-                - last_cluster_right,
-                cluster["Right"].max()
-            )
-            right_bounds.append(last_cluster_right)
-        col_spans = pd.Series(zip(left_bounds, right_bounds)) 
-        return col_spans
+        combined_words = pd.concat([header_words, table_words])
+        crossing_right = init_right.map(
+            lambda x: find_crossing_right(combined_words, x)
+        )
+        new_right = init_right.where(
+            crossing_right.isna(),
+            crossing_right,
+        )
+        init_left.iloc[1:] = new_right.iloc[:-1]
+        self._col_spans = init_left.combine(
+            new_right,
+            lambda x, y: (x, y)
+        )
+        print(self._col_spans)
+        return self._col_spans
 
     def get_rows(self, words, page):
         table_words = self.get_table_words(words, page)
-        y_tol = table_words["Height"].max() * 1.5
+        if not table_words.shape[0]:
+            return []
+        y_tol = table_words["Height"].max() * 1.1
         x_tol = table_words["Width"].median()
         word_clusters = cluster_words(
             table_words,
@@ -188,6 +214,7 @@ class TableExtractor:
         )
         col_spans = self.get_col_spans(words, page)
         columnized = columnize(word_clusters[0], col_spans)
+        print(columnized.map(lambda x: " ".join(x["Text"].values)))
         columnized.index = self.fields
         last_col_coords = pd.DataFrame.from_records(
             columnized.map(get_cluster_coords)
@@ -204,10 +231,7 @@ class TableExtractor:
             )
             nonempty = col_coords.dropna().index.to_series()
             last_nonempty = last_col_coords.dropna().index.to_series()
-            delta_cols = (
-                (nonempty.count() > last_nonempty.count())
-                or (~nonempty.isin(last_nonempty)).any()
-            )
+            delta_cols = (~nonempty.isin(last_nonempty)).any()
             y_delta = (
                 col_coords["Midpoint_Y"].median() 
                 - last_col_coords["Midpoint_Y"].median()
