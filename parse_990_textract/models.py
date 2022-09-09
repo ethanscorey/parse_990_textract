@@ -198,15 +198,15 @@ class TableExtractor:
             new_right,
             lambda x, y: (x, y)
         )
-        print(self._col_spans)
         return self._col_spans
 
     def get_rows(self, words, page):
         table_words = self.get_table_words(words, page)
         if not table_words.shape[0]:
             return []
-        y_tol = table_words["Height"].max() * 1.1
+        y_tol = table_words["Height"].max() * 1.5
         x_tol = table_words["Width"].median()
+        sum_y_delta = y_tol
         word_clusters = cluster_words(
             table_words,
             table_words["Height"].min(),
@@ -214,12 +214,10 @@ class TableExtractor:
         )
         col_spans = self.get_col_spans(words, page)
         columnized = columnize(word_clusters[0], col_spans)
-        print(columnized.map(lambda x: " ".join(x["Text"].values)))
         columnized.index = self.fields
         last_col_coords = pd.DataFrame.from_records(
             columnized.map(get_cluster_coords)
         )
-        sum_y_delta = y_tol
         rows = []
         current_row = [columnized]
         
@@ -237,8 +235,8 @@ class TableExtractor:
                 - last_col_coords["Midpoint_Y"].median()
             )
             sum_y_delta += y_delta
-            mean_y_delta = sum_y_delta / (count + 1)
-            min_y_delta = mean_y_delta * 0.67
+            mean_y_delta = sum_y_delta / (count + 2)  # count is zero-indexed
+            min_y_delta = mean_y_delta * 0.75
             if (delta_cols or (y_delta > y_tol)) and (y_delta > min_y_delta):
                 combined_row = combine_row(current_row)
                 rows.append(combined_row)
