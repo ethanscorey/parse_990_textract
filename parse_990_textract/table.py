@@ -68,8 +68,12 @@ def extract_table_data(
                     top_label=table["table_top"],
                     bottom_label=table["table_bottom"],
                     tablemap=tablemap,
-                    fields=table_row_extractors["field"],
-                    field_labels=table_row_extractors["col_left"],
+                    fields=table_row_extractors["field"].reset_index(
+                        drop=True
+                    ),
+                    field_labels=table_row_extractors["col_left"].reset_index(
+                        drop=True
+                    ),
                 ),
             ),
         ).apply(

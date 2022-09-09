@@ -145,10 +145,9 @@ class TableExtractor:
             return table_words
         self._table_words = words.loc[
             (words["Page"] == page)
-            & words["Midpoint_Y"].between(
-                self.get_table_top(words, page),
-                self.get_table_bottom(words, page)
-            )
+            # Use Midpoint_X to ensure we don't include anything from header
+            & (words["Midpoint_X"] < self.get_table_top(words, page))
+            & (words["Top"] < self.get_table_bottom(words, page))
         ]
         return self._table_words
 
@@ -172,7 +171,7 @@ class TableExtractor:
             return col_spans
         init_left = self.field_labels.map(
             lambda x: get_coordinate(self.tablemap, x, "Left", "Left_Default"),
-        )
+        ).reset_index(drop=True)
         init_right = pd.concat(
             [
                 init_left.iloc[1:],
@@ -180,7 +179,7 @@ class TableExtractor:
             ],
             ignore_index=True,
         )
-        init_spans = init_left.reset_index(drop=True).combine(
+        init_spans = init_left.combine(
             init_right, lambda x, y: (x, y), 
         )
         header_words = self.get_header_words(words, page)
@@ -204,7 +203,7 @@ class TableExtractor:
         table_words = self.get_table_words(words, page)
         if not table_words.shape[0]:
             return []
-        y_tol = table_words["Height"].max() * 1.5
+        y_tol = table_words["Height"].max() * 2
         x_tol = table_words["Width"].median()
         sum_y_delta = y_tol
         word_clusters = cluster_words(
@@ -236,7 +235,7 @@ class TableExtractor:
             )
             sum_y_delta += y_delta
             mean_y_delta = sum_y_delta / (count + 2)  # count is zero-indexed
-            min_y_delta = mean_y_delta * 0.5
+            min_y_delta = min(mean_y_delta, y_tol)
             if (delta_cols or (y_delta > y_tol)) and (y_delta > min_y_delta):
                 combined_row = combine_row(current_row)
                 rows.append(combined_row)
