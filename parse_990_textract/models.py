@@ -236,7 +236,7 @@ class TableExtractor:
             )
             sum_y_delta += y_delta
             mean_y_delta = sum_y_delta / (count + 2)  # count is zero-indexed
-            min_y_delta = mean_y_delta * 0.75
+            min_y_delta = mean_y_delta * 0.5
             if (delta_cols or (y_delta > y_tol)) and (y_delta > min_y_delta):
                 combined_row = combine_row(current_row)
                 rows.append(combined_row)
