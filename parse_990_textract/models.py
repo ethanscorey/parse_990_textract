@@ -212,7 +212,7 @@ class TableExtractor:
         col_spans = self.get_col_spans(words, page)
         columnized = columnize(word_clusters[0], col_spans)
         columnized.index = self.fields
-        last_cluseter_coords = pd.DataFrame.from_records(
+        last_cluster_coords = pd.DataFrame.from_records(
             columnized.map(get_cluster_coords)
         )
         rows = []
