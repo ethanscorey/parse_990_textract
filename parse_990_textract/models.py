@@ -228,20 +228,20 @@ class TableExtractor:
         for count, cluster in enumerate(word_clusters[1:]):
             columnized = columnize(cluster, col_spans)
             columnized.index = self.fields
-            col_coords = pd.DataFrame.from_records(
+            cluster_coords = pd.DataFrame.from_records(
                 columnized.map(get_cluster_coords)
             )
             y_delta = (
-                col_coords["Top"].min() 
-                - last_col_coords["Bottom"].max()
+                cluster_coords["Top"].min() 
+                - last_cluster_coords["Bottom"].max()
             )
             if y_delta > y_tol:
                 combined_row = combine_row(current_row)
                 rows.append(combined_row)
                 current_row = [columnized]
             else:
-                nonempty = col_coords.dropna().index.to_series()
-                last_nonempty = last_col_coords.dropna().index.to_series()
+                nonempty = cluster_coords.dropna().index.to_series()
+                last_nonempty = last_cluster_coords.dropna().index.to_series()
                 delta_cols = (~nonempty.isin(last_nonempty)).any()
                 if not delta_cols and (alignment == "UNKNOWN"):
                     alignment = "TOP"
@@ -255,7 +255,7 @@ class TableExtractor:
                     current_row = [columnized]
                 else:
                     current_row.append(columnized)
-            last_col_coords = col_coords
+            last_cluster_coords = cluster_coords
         combined_row = combine_row(current_row)
         rows.append(combined_row)
         return rows
