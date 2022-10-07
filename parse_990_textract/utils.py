@@ -107,7 +107,7 @@ def get_cluster_coords(cluster):
 def columnize(word_cluster, col_spans):
     return col_spans.map(
         lambda span: word_cluster.loc[
-            word_cluster["Left"].between(*span, inclusive="left")
+            word_cluster["Right"].between(*span, inclusive="right")
         ]
     )
 

@@ -203,7 +203,7 @@ class TableExtractor:
         table_words = self.get_table_words(words, page)
         if not table_words.shape[0]:
             return []
-        y_tol = table_words["Height"].median()
+        y_tol = table_words["Height"].median() * 0.5
         word_clusters = cluster_words(
             table_words,
             table_words["Height"].min(),
@@ -221,7 +221,7 @@ class TableExtractor:
             last_cluster_coords["Top"].min()
             - self.get_table_top(words, page)
         )
-        if top_ws > y_tol:
+        if top_ws > y_tol * 3:
             alignment = "BOTTOM"
         else:
             alignment = "UNKNOWN"

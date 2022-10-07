@@ -20,7 +20,7 @@ def clean_df(df, non_numeric_columns):
     return df.apply(
         lambda x: x.map(clean_num) if not x.name in non_numeric_columns else x,
         axis=0
-    ).reset_index().assign(
+    ).reset_index(drop=True).assign(
         split_pdf_key=lambda df: df["pdf_key"].str.split("_"),
         ein=lambda df: df["split_pdf_key"].map(lambda x: x[1]),
         year=lambda df: df["split_pdf_key"].map(lambda x: x[3]),
