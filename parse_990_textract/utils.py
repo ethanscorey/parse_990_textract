@@ -11,13 +11,14 @@ def setup_config(env_file_var="ENVFILE", env_file_default=".env.local"):
     return dotenv_values(os.getenv(env_file_var, env_file_default))
 
 
-def setup_logger(logger_name, config, log_level_var="PARSE_990_TEXTRACT_OUTPUT_LOG_LEVEL", log_level_default="DEBUG"):
+def setup_logger(
+    logger_name,
+    config,
+    log_level_var="PARSE_990_TEXTRACT_OUTPUT_LOG_LEVEL",
+    log_level_default="DEBUG",
+):
     logger = logging.getLogger(logger_name)
-    logger.setLevel(
-        getattr(
-            logging, config.get(log_level_var, log_level_default)
-        )
-    )
+    logger.setLevel(getattr(logging, config.get(log_level_var, log_level_default)))
     return logger
 
 
@@ -39,10 +40,7 @@ def get_regex(string, regex, match_group=0, alt_value=None):
 def get_best_match(string, regex, alt_value=None):
     match = regex.search(string)
     if match is not None:
-        return max(
-            match.groups(),
-            key=lambda x: len(x) if x is not None else 0
-        )
+        return max(match.groups(), key=lambda x: len(x) if x is not None else 0)
     return alt_value
 
 
@@ -71,10 +69,7 @@ def clean_num(text) -> str:
 
 def cluster_words(words, tolerance, attribute):
     if (tolerance == 0) or (words.shape[0] < 2):
-     return [
-         [word] for (idx, word)
-         in words.sort_values(by=attribute).iterrows()
-     ]
+        return [[word] for (idx, word) in words.sort_values(by=attribute).iterrows()]
     groups = []
     sorted_words = words.sort_values(by=attribute)
     current_group = [sorted_words.iloc[0]]
@@ -114,10 +109,7 @@ def columnize(word_cluster, col_spans):
 
 def cluster_x(words, tolerance):
     if (tolerance == 0) or (words.shape[0] < 2):
-        return [
-            [word] for (idx, word)
-            in words.sort_values(by="Left").iterrows()
-        ]
+        return [[word] for (idx, word) in words.sort_values(by="Left").iterrows()]
     groups = []
     sorted_words = words.sort_values(by="Left")
     current_group = [sorted_words.iloc[0]]
@@ -155,48 +147,36 @@ def rotate(textract_obj):
 
 
 def id_rotated_pages(df):
-    lines = df.loc[
-        df["BlockType"] == "LINE"
-    ]
+    lines = df.loc[df["BlockType"] == "LINE"]
     by_page = lines.groupby("Page")
-    return (
-        by_page["Width"].mean()
-        / by_page["Height"].mean()
-    )[lambda x: x < 0.5].index.values
+    return (by_page["Width"].mean() / by_page["Height"].mean())[
+        lambda x: x < 0.5
+    ].index.values
 
 
 def rotate_pages(df):
-    rotated_pages = id_rotated_pages(
-        df.loc[
-            df["BlockType"] == "LINE"
-        ]
-    )
-    return df.mask(
-        df["Page"].isin(rotated_pages),
-        rotate,
-        axis=1
-    )
+    rotated_pages = id_rotated_pages(df.loc[df["BlockType"] == "LINE"])
+    return df.mask(df["Page"].isin(rotated_pages), rotate, axis=1)
 
 
 def combine_row(row):
-    combined_row = pd.Series([
-        line.map(
-            lambda x: x.sort_values(
-                by="Left"
-            ).reset_index(drop=True)["Text"].fillna("")
-        ).agg(
-            lambda x: " ".join(x.values)
-        ) + " "
-        for line in row
-    ]).sum().str.strip()
+    combined_row = (
+        pd.Series(
+            [
+                line.map(
+                    lambda x: x.sort_values(by="Left")
+                    .reset_index(drop=True)["Text"]
+                    .fillna("")
+                ).agg(lambda x: " ".join(x.values))
+                + " "
+                for line in row
+            ]
+        )
+        .sum()
+        .str.strip()
+    )
     return combined_row
 
 
 def find_crossing_right(df, right):
-    return (
-        df.loc[
-            (df["Right"] > right*1.01)
-            & (df["Left"] < right),
-            "Left"
-        ].min()
-    )
+    return df.loc[(df["Right"] > right * 1.01) & (df["Left"] < right), "Left"].min()

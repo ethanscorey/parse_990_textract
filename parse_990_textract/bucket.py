@@ -13,9 +13,7 @@ from .utils import rotate_pages
 config = dotenv_values(os.getenv("ENVFILE", ".env.local"))
 logger = logging.getLogger(__name__)
 logger.setLevel(
-    getattr(
-        logging, config.get("PARSE_990_TEXTRACT_OUTPUT_LOG_LEVEL", "DEBUG")
-    )
+    getattr(logging, config.get("PARSE_990_TEXTRACT_OUTPUT_LOG_LEVEL", "DEBUG"))
 )
 
 
@@ -23,33 +21,19 @@ def get_json(bucket, obj_key):
     json_file = io.BytesIO()
     bucket.download_fileobj(obj_key, json_file)
     json_file.seek(0)
-    return json.load(
-        io.StringIO(
-            json_file.read().decode("utf-8")
-        )
-    )["Blocks"]
+    return json.load(io.StringIO(json_file.read().decode("utf-8")))["Blocks"]
 
 
 def strip_prefix(key, prefix):
-    return key[len(prefix):]
+    return key[len(prefix) :]
 
 
 def get_records(
-    bucket,
-    job_id,
-    prefix,
-    limit=1000,
-    exclude=(".s3_access_check",),
-    marker=None
+    bucket, job_id, prefix, limit=1000, exclude=(".s3_access_check",), marker=None
 ):
     if marker is None:
-        logger.info(
-            f"Extracting records for job {job_id} from bucket {bucket.name}"
-        )
-        json_objects = bucket.objects.filter(
-            Prefix=f"{prefix}/{job_id}", 
-            MaxKeys=limit
-        )
+        logger.info(f"Extracting records for job {job_id} from bucket {bucket.name}")
+        json_objects = bucket.objects.filter(Prefix=f"{prefix}/{job_id}", MaxKeys=limit)
     else:
         logger.info(
             f"Extracting records for job {job_id} from bucket {bucket.name}"
@@ -88,7 +72,7 @@ def open_df(bucket, job_id, prefix="textract-output"):
             "SelectionStatus",
             "RowIndex",
             "RowSpan",
-        ]
+        ],
     ).assign(
         Polygon=lambda df: df["Geometry"].map(lambda x: x["Polygon"]),
         Height=lambda df: df["Geometry"].map(lambda x: x["BoundingBox"]["Height"]),
@@ -103,10 +87,10 @@ def open_df(bucket, job_id, prefix="textract-output"):
         Midpoint_X=lambda df: (df["Left"] + df["Right"]) / 2,
         Midpoint_Y=lambda df: (df["Top"] + df["Bottom"]) / 2,
         Width=lambda df: df["Geometry"].map(lambda x: x["BoundingBox"]["Width"]),
-        Children=lambda df: df["Relationships"].map(lambda x: x[0]["Ids"] if x is not None else x),
+        Children=lambda df: df["Relationships"].map(
+            lambda x: x[0]["Ids"] if x is not None else x
+        ),
         Line_No=lambda df: pd.qcut(df["Top"], 100, labels=list(range(100))).astype(int),
         File=job_id,
     )
-    return rotate_pages(df).sort_values(
-        by=["Page", "Line_No", "Left"]
-    )
+    return rotate_pages(df).sort_values(by=["Page", "Line_No", "Left"])

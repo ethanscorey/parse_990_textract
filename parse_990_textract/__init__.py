@@ -9,7 +9,11 @@ from .bucket import open_df
 from .filing import create_roadmap, extract_from_roadmap
 from .parse import find_pages
 from .postprocessing import (
-    clean_filing, clean_f_i, clean_f_ii, clean_f_iii, postprocess
+    clean_filing,
+    clean_f_i,
+    clean_f_ii,
+    clean_f_iii,
+    postprocess,
 )
 from .setup import load_extractor_df
 from .table import extract_table_data
@@ -34,7 +38,9 @@ def handler(event, context):
     schedule_f_table_extractor_df = pd.read_csv("schedule_f_table_extractors.csv")
     schedule_f_row_extractor_df = pd.read_csv("schedule_f_row_extractors.csv")
 
-    PART_I_HEADER = r"\(a\)\s*Region|\(d\)\s*Activities|\(e\)\s*If activity|\(f\)Total expenditures"
+    PART_I_HEADER = (
+        r"\(a\)\s*Region|\(d\)\s*Activities|\(e\)\s*If activity|\(f\)Total expenditures"
+    )
     PART_II_HEADER = r"\(b\)\s*IRS code|\(c\)\s*Region|\(d\)\s*Purpose|\(f\)\s*Manner|\(h\)\s*Description"
     PART_III_HEADER = r"\(b\)\s*Region|\(e\)\s*Manner of cash|\(h\)\s*Method of va"
     PART_I_TABLE_NAME = "Activities per Region"
@@ -50,24 +56,23 @@ def handler(event, context):
     page_map = find_pages(lines)
     if lines.loc[
         (lines["Page"] == page_map["Page 1"])
-        & lines["Text"].str.contains(
-            "Net rental income|Direct public|IRS label"
-        ),
-        "Page"
+        & lines["Text"].str.contains("Net rental income|Direct public|IRS label"),
+        "Page",
     ].any():
         raise ValueError("Incorrect form version.")
-    roadmap = create_roadmap(
-        lines, roadmap_df, page_map
-    )
+    roadmap = create_roadmap(lines, roadmap_df, page_map)
 
-    row = extract_from_roadmap(
-        words, lines, roadmap, extractor_df, page_map
-    )
-    row = postprocess(row, job_id, pdf_key, clean_filing) 
+    row = extract_from_roadmap(words, lines, roadmap, extractor_df, page_map)
+    row = postprocess(row, job_id, pdf_key, clean_filing)
 
     part_i_table = extract_table_data(
-        pages, lines, words, PART_I_HEADER, PART_I_TABLE_NAME,
-        schedule_f_tablemap_df, schedule_f_table_extractor_df,
+        pages,
+        lines,
+        words,
+        PART_I_HEADER,
+        PART_I_TABLE_NAME,
+        schedule_f_tablemap_df,
+        schedule_f_table_extractor_df,
         schedule_f_row_extractor_df,
     )
     part_i_table = postprocess(part_i_table, job_id, pdf_key, clean_f_i)
@@ -75,8 +80,13 @@ def handler(event, context):
         part_i_table = part_i_table.to_dict()
 
     part_ii_table = extract_table_data(
-        pages, lines, words, PART_II_HEADER, PART_II_TABLE_NAME,
-        schedule_f_tablemap_df, schedule_f_table_extractor_df,
+        pages,
+        lines,
+        words,
+        PART_II_HEADER,
+        PART_II_TABLE_NAME,
+        schedule_f_tablemap_df,
+        schedule_f_table_extractor_df,
         schedule_f_row_extractor_df,
     )
     part_ii_table = postprocess(part_ii_table, job_id, pdf_key, clean_f_ii)
@@ -84,14 +94,19 @@ def handler(event, context):
         part_ii_table = part_ii_table.to_dict()
 
     part_iii_table = extract_table_data(
-        pages, lines, words, PART_III_HEADER, PART_III_TABLE_NAME,
-        schedule_f_tablemap_df, schedule_f_table_extractor_df,
+        pages,
+        lines,
+        words,
+        PART_III_HEADER,
+        PART_III_TABLE_NAME,
+        schedule_f_tablemap_df,
+        schedule_f_table_extractor_df,
         schedule_f_row_extractor_df,
     )
     part_iii_table = postprocess(part_iii_table, job_id, pdf_key, clean_f_iii)
     if part_iii_table is not None:
         part_iii_table = part_iii_table.to_dict()
-    
+
     return {
         "statusCode": 200,
         "body": {
@@ -104,5 +119,5 @@ def handler(event, context):
             "pdf_key": pdf_key,
             "bucket_name": bucket_name,
             "table_name": event.get("table_name"),
-        }
+        },
     }

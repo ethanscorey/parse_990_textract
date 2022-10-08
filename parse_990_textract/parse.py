@@ -13,14 +13,14 @@ def find_pages(ocr_data):
         "Page 1": id_first_page(ocr_data),
         "Page 10": id_page_10(ocr_data),
         "Schedule F, Page 1": (sched_f := id_sched_f(ocr_data)),
-        "Schedule F, Page 2": sched_f+1 if sched_f else sched_f,
+        "Schedule F, Page 2": sched_f + 1 if sched_f else sched_f,
     }
 
 
 def id_sched_f(ocr_data):
     matching_page = ocr_data.loc[
         ocr_data["Text"].str.contains("General Information on Activities Outside"),
-        "Page"
+        "Page",
     ]
     if not matching_page.count():
         return 0
@@ -29,8 +29,7 @@ def id_sched_f(ocr_data):
 
 def id_page_10(ocr_data):
     matching_page = ocr_data.loc[
-        ocr_data["Text"].str.contains("Statement of Functional Expenses"),
-        "Page"
+        ocr_data["Text"].str.contains("Statement of Functional Expenses"), "Page"
     ]
     if not matching_page.count():
         logger.error("Statement of functional expenses missing")
@@ -85,27 +84,31 @@ def create_extractors(extractor_df, roadmap, page_map):
                 row["bottom"],
                 row["bottom_delta"],
             ),
-            regex=row["regex"]
+            regex=row["regex"],
         ),
-        axis=1
+        axis=1,
     )
 
 
 def find_item(
-    landmark, lines, page_no, item_string, default_left,
-    default_top, x_tolerance, y_tolerance
+    landmark,
+    lines,
+    page_no,
+    item_string,
+    default_left,
+    default_top,
+    x_tolerance,
+    y_tolerance,
 ):
     found = lines.loc[
         (lines["Page"] == page_no)
         & lines["Text"].str.contains(item_string)
         & lines["Left"].between(
-            default_left-x_tolerance, 
-            default_left+x_tolerance,
+            default_left - x_tolerance,
+            default_left + x_tolerance,
         )
-        & lines["Top"].between(
-            default_top-y_tolerance,
-            default_top+y_tolerance),
-        ["Top", "Left"]
+        & lines["Top"].between(default_top - y_tolerance, default_top + y_tolerance),
+        ["Top", "Left"],
     ].reset_index()
     found = found.drop(columns=["Id"])
     if found["Top"].count() < 1:
@@ -119,6 +122,4 @@ def find_item(
 
 
 def find_table_pages(page_text, table_header):
-    return page_text.loc[
-        page_text.str.contains(table_header)
-    ].index.to_series()
+    return page_text.loc[page_text.str.contains(table_header)].index.to_series()
