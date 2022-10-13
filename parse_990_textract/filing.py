@@ -3,7 +3,6 @@ import pandas as pd
 from .parse import create_extractors, find_item
 from .utils import setup_config, setup_logger
 
-
 config = setup_config()
 logger = setup_logger(__name__, config)
 
@@ -49,6 +48,8 @@ def create_roadmap(lines, roadmap_df, page_map):
 def extract_from_roadmap(words, lines, roadmap, extractor_df, page_map):
     extractors = create_extractors(extractor_df, roadmap, page_map)
     return pd.Series(
-        extractors.map(lambda extractor: extractor.extract(words, lines)).values,
+        extractors.map(
+            lambda extractor: extractor.extract(words, lines)
+        ).values,
         index=extractor_df["field_name"],
     )

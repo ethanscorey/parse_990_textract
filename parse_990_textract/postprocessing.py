@@ -1,7 +1,6 @@
 import pandas as pd
 
-from .utils import setup_config, setup_logger, clean_num
-
+from .utils import clean_num, setup_config, setup_logger
 
 config = setup_config()
 logger = setup_logger(__name__, config)
@@ -19,7 +18,9 @@ def postprocess(data, job_id, pdf_key, clean_func):
 def clean_df(df, non_numeric_columns):
     return (
         df.apply(
-            lambda x: x.map(clean_num) if not x.name in non_numeric_columns else x,
+            lambda x: x.map(clean_num)
+            if x.name not in non_numeric_columns
+            else x,
             axis=0,
         )
         .reset_index(drop=True)

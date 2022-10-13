@@ -1,24 +1,21 @@
 import json
-import logging
 
 import boto3
-from dotenv import dotenv_values
 import pandas as pd
 
 from .bucket import open_df
 from .filing import create_roadmap, extract_from_roadmap
 from .parse import find_pages
 from .postprocessing import (
-    clean_filing,
     clean_f_i,
     clean_f_ii,
     clean_f_iii,
+    clean_filing,
     postprocess,
 )
 from .setup import load_extractor_df
 from .table import extract_table_data
 from .utils import setup_config, setup_logger
-
 
 config = setup_config()
 logger = setup_logger(__name__, config)
@@ -35,14 +32,22 @@ def handler(event, context):
     extractor_df = load_extractor_df("990_extractors.csv")
     roadmap_df = pd.read_csv("990_roadmap.csv")
     schedule_f_tablemap_df = pd.read_csv("schedule_f_table_roadmap.csv")
-    schedule_f_table_extractor_df = pd.read_csv("schedule_f_table_extractors.csv")
+    schedule_f_table_extractor_df = pd.read_csv(
+        "schedule_f_table_extractors.csv"
+    )
     schedule_f_row_extractor_df = pd.read_csv("schedule_f_row_extractors.csv")
 
     PART_I_HEADER = (
-        r"\(a\)\s*Region|\(d\)\s*Activities|\(e\)\s*If activity|\(f\)Total expenditures"
+        r"\(a\)\s*Region|\(d\)\s*Activities|\(e\)\s*"
+        r"If activity|\(f\)Total expenditures"
     )
-    PART_II_HEADER = r"\(b\)\s*IRS code|\(c\)\s*Region|\(d\)\s*Purpose|\(f\)\s*Manner|\(h\)\s*Description"
-    PART_III_HEADER = r"\(b\)\s*Region|\(e\)\s*Manner of cash|\(h\)\s*Method of va"
+    PART_II_HEADER = (
+        r"\(b\)\s*IRS code|\(c\)\s*Region|\(d\)\s*"
+        r"Purpose|\(f\)\s*Manner|\(h\)\s*Description"
+    )
+    PART_III_HEADER = (
+        r"\(b\)\s*Region|\(e\)\s*Manner of cash|\(h\)\s*Method of va"
+    )
     PART_I_TABLE_NAME = "Activities per Region"
     PART_II_TABLE_NAME = r"Grants to Organizations Outside the United States"
     PART_III_TABLE_NAME = "Grants to Individuals Outside the United States"
@@ -56,7 +61,9 @@ def handler(event, context):
     page_map = find_pages(lines)
     if lines.loc[
         (lines["Page"] == page_map["Page 1"])
-        & lines["Text"].str.contains("Net rental income|Direct public|IRS label"),
+        & lines["Text"].str.contains(
+            "Net rental income|Direct public|IRS label"
+        ),
         "Page",
     ].any():
         raise ValueError("Incorrect form version.")

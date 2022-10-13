@@ -3,7 +3,6 @@ import pandas as pd
 from .models import BoundingBox, Extractor
 from .utils import get_coordinate, setup_config, setup_logger
 
-
 config = setup_config()
 logger = setup_logger(__name__, config)
 
@@ -19,7 +18,9 @@ def find_pages(ocr_data):
 
 def id_sched_f(ocr_data):
     matching_page = ocr_data.loc[
-        ocr_data["Text"].str.contains("General Information on Activities Outside"),
+        ocr_data["Text"].str.contains(
+            "General Information on Activities Outside"
+        ),
         "Page",
     ]
     if not matching_page.count():
@@ -29,7 +30,8 @@ def id_sched_f(ocr_data):
 
 def id_page_10(ocr_data):
     matching_page = ocr_data.loc[
-        ocr_data["Text"].str.contains("Statement of Functional Expenses"), "Page"
+        ocr_data["Text"].str.contains("Statement of Functional Expenses"),
+        "Page",
     ]
     if not matching_page.count():
         logger.error("Statement of functional expenses missing")
@@ -107,7 +109,9 @@ def find_item(
             default_left - x_tolerance,
             default_left + x_tolerance,
         )
-        & lines["Top"].between(default_top - y_tolerance, default_top + y_tolerance),
+        & lines["Top"].between(
+            default_top - y_tolerance, default_top + y_tolerance
+        ),
         ["Top", "Left"],
     ].reset_index()
     found = found.drop(columns=["Id"])
@@ -122,4 +126,6 @@ def find_item(
 
 
 def find_table_pages(page_text, table_header):
-    return page_text.loc[page_text.str.contains(table_header)].index.to_series()
+    return page_text.loc[
+        page_text.str.contains(table_header)
+    ].index.to_series()

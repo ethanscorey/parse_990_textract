@@ -5,18 +5,15 @@ import pandas as pd
 
 from .utils import (
     cluster_words,
-    cluster_x,
-    combine_row,
     columnize,
+    combine_row,
     find_crossing_right,
-    get_best_match,
-    get_coordinate,
     get_cluster_coords,
+    get_coordinate,
     get_regex,
     setup_config,
     setup_logger,
 )
-
 
 config = setup_config()
 logger = setup_logger(__name__, config)
@@ -165,7 +162,8 @@ class TableExtractor:
             (words["Page"] == page)
             & words["Midpoint_Y"].between(
                 self.get_header_top(words, page),
-                self.get_table_top(words, page) - self.get_word_delta(words, page),
+                self.get_table_top(words, page)
+                - self.get_word_delta(words, page),
             )
         ]
         return self._header_words
@@ -183,10 +181,6 @@ class TableExtractor:
                 pd.Series([1]),
             ],
             ignore_index=True,
-        )
-        init_spans = init_left.combine(
-            init_right,
-            lambda x, y: (x, y),
         )
         header_words = self.get_header_words(words, page)
         table_words = self.get_table_words(words, page)
@@ -222,18 +216,23 @@ class TableExtractor:
         )
         rows = []
         current_row = [columnized]
-        top_ws = last_cluster_coords["Top"].min() - self.get_table_top(words, page)
+        top_ws = last_cluster_coords["Top"].min() - self.get_table_top(
+            words, page
+        )
         if top_ws > y_tol * 3:
             alignment = "BOTTOM"
         else:
             alignment = "UNKNOWN"
-        for count, cluster in enumerate(word_clusters[1:]):
+        for cluster in word_clusters[1:]:
             columnized = columnize(cluster, col_spans)
             columnized.index = self.fields
             cluster_coords = pd.DataFrame.from_records(
                 columnized.map(get_cluster_coords)
             )
-            y_delta = cluster_coords["Top"].min() - last_cluster_coords["Bottom"].max()
+            y_delta = (
+                cluster_coords["Top"].min()
+                - last_cluster_coords["Bottom"].max()
+            )
             if y_delta > y_tol:
                 combined_row = combine_row(current_row)
                 rows.append(combined_row)

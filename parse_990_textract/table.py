@@ -4,7 +4,6 @@ from .models import TableExtractor
 from .parse import find_item, find_table_pages
 from .utils import setup_config, setup_logger
 
-
 config = setup_config()
 logger = setup_logger(__name__, config)
 
@@ -74,8 +73,12 @@ def extract_table_data(
         }
     )
 
-    table_row_extractors = row_extractor_df.loc[row_extractor_df["table"] == table_name]
-    table = table_extractor_df.loc[table_extractor_df["table"] == table_name].iloc[0]
+    table_row_extractors = row_extractor_df.loc[
+        row_extractor_df["table"] == table_name
+    ]
+    table = table_extractor_df.loc[
+        table_extractor_df["table"] == table_name
+    ].iloc[0]
     try:
         extractors = tablemaps.assign(
             extractor=tablemaps["tablemap"].map(
@@ -84,7 +87,9 @@ def extract_table_data(
                     top_label=table["table_top"],
                     bottom_label=table["table_bottom"],
                     tablemap=tablemap,
-                    fields=table_row_extractors["field"].reset_index(drop=True),
+                    fields=table_row_extractors["field"].reset_index(
+                        drop=True
+                    ),
                     field_labels=table_row_extractors["col_left"].reset_index(
                         drop=True
                     ),
@@ -93,7 +98,8 @@ def extract_table_data(
         )
 
         rows = extractors.apply(
-            lambda row: row["extractor"].extract_rows(words, row["page"]), axis=1
+            lambda row: row["extractor"].extract_rows(words, row["page"]),
+            axis=1,
         ).dropna()
 
     except KeyError as e:

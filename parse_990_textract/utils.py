@@ -3,8 +3,8 @@ import math
 import os
 import re
 
-from dotenv import dotenv_values
 import pandas as pd
+from dotenv import dotenv_values
 
 
 def setup_config(env_file_var="ENVFILE", env_file_default=".env.local"):
@@ -18,7 +18,9 @@ def setup_logger(
     log_level_default="DEBUG",
 ):
     logger = logging.getLogger(logger_name)
-    logger.setLevel(getattr(logging, config.get(log_level_var, log_level_default)))
+    logger.setLevel(
+        getattr(logging, config.get(log_level_var, log_level_default))
+    )
     return logger
 
 
@@ -40,7 +42,9 @@ def get_regex(string, regex, match_group=0, alt_value=None):
 def get_best_match(string, regex, alt_value=None):
     match = regex.search(string)
     if match is not None:
-        return max(match.groups(), key=lambda x: len(x) if x is not None else 0)
+        return max(
+            match.groups(), key=lambda x: len(x) if x is not None else 0
+        )
     return alt_value
 
 
@@ -69,12 +73,15 @@ def clean_num(text) -> str:
 
 def cluster_words(words, tolerance, attribute):
     if (tolerance == 0) or (words.shape[0] < 2):
-        return [[word] for (idx, word) in words.sort_values(by=attribute).iterrows()]
+        return [
+            [word]
+            for (_idx, word) in words.sort_values(by=attribute).iterrows()
+        ]
     groups = []
     sorted_words = words.sort_values(by=attribute)
     current_group = [sorted_words.iloc[0]]
     last = sorted_words.iloc[0][attribute]
-    for idx, word in sorted_words.iloc[1:].iterrows():
+    for _idx, word in sorted_words.iloc[1:].iterrows():
         if word[attribute] <= (last + tolerance):
             current_group.append(word)
         else:
@@ -109,12 +116,14 @@ def columnize(word_cluster, col_spans):
 
 def cluster_x(words, tolerance):
     if (tolerance == 0) or (words.shape[0] < 2):
-        return [[word] for (idx, word) in words.sort_values(by="Left").iterrows()]
+        return [
+            [word] for (_idx, word) in words.sort_values(by="Left").iterrows()
+        ]
     groups = []
     sorted_words = words.sort_values(by="Left")
     current_group = [sorted_words.iloc[0]]
     last = sorted_words.iloc[0]["Right"]
-    for idx, word in sorted_words.iloc[1:].iterrows():
+    for _idx, word in sorted_words.iloc[1:].iterrows():
         if word["Left"] <= (last + tolerance):
             current_group.append(word)
         else:
@@ -179,4 +188,6 @@ def combine_row(row):
 
 
 def find_crossing_right(df, right):
-    return df.loc[(df["Right"] > right * 1.01) & (df["Left"] < right), "Left"].min()
+    return df.loc[
+        (df["Right"] > right * 1.01) & (df["Left"] < right), "Left"
+    ].min()
