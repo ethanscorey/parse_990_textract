@@ -15,6 +15,18 @@ pandas = "^1.5.0"
 python-dotenv = "^0.21.0"
 
 
+[tool.poetry.group.dev.dependencies]
+black = "^22.10.0"
+pycodestyle = "^2.9.1"
+isort = "^5.10.1"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
