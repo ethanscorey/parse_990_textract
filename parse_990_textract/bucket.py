@@ -54,8 +54,7 @@ def get_records(
         )
     combined = []
     last_key = ""
-    obj_count = len(json_objects)
-    for json_obj in json_objects:
+    for obj_count, json_obj in enumerate(json_objects):  # noqa: B007
         if strip_prefix(json_obj.key, f"{prefix}/{job_id}/") not in exclude:
             combined.extend(get_json(bucket, json_obj.key))
         last_key = json_obj.key

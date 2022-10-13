@@ -1,10 +1,12 @@
 ﻿field_name,strategy,left,left_delta,top,top_delta,right,right_delta,bottom,bottom_delta,page,regex
 name,lines,Item C,-0.001,Item C,0,Item D,0.01,Item F,0,Page 1,zation\s*(?:Name\s*)?(?P<match>.+?)\s*Do[il]n[ag]
-address,lines,Item C,-0.001,Item C,0,Item D,0.01,Item F,0,Page 1,address\)(?: Room/s\w+e)?(?:.+umber)?\s*(?P<match>.+?)\s*(?:City(?: or)? [ft]own|Room/suite)
-city,lines,Item C,-0.001,Item G,0,Item D,0.01,Item F,0,Page 1,"(?P<match>[A-Z][A-Za-z -']{2,}),?\s+[A-Z]{2}\b"
+address,lines,Item C,-0.001,Item C,0,Item D,0.01,Item F,0,Page 1,addr\w*\)(?: Room/s\w+e)?(?:.+umber)?\s*(?P<match>.+?)\s*(?:City(?: or)? [ft]own|Room/suite)
+city,lines,Item C,-0.001,Item G,0,Item D,0.01,Item F,0,Page 1,"(?:\+\s*4|country)?\s*(?P<match>[A-Z][A-Za-z -']{2,}),?\s+[A-Z]{2}\b"
 state,lines,Item C,-0.001,Item C,0,Item D,0.01,Item F,0,Page 1,(?P<match>[A-Z]{2})[^A-Za-z]*\d{5}
 zip,lines,Item C,-0.001,Item C,0,Item D,0.01,Item F,0,Page 1,[A-Z]{2}[^A-Za-z]*(?P<match>\d{5})
-website,words,Item J,-0.001,Item J,0,Item H,0.01,Item K,0,Page 1,"(?P<match>(?:www[. ] ?|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\. ?[^\s]{2,}|N[/a-zA-Z]+|[wW]+[. ]\w+[. ]\w{3}|\w+[. ](?:com|COM|org|ORG|edu|EDU))"
+website,words,Item J,-0.001,Item J,0,Item H,0.01,Item K,0,Page 1,"(?P<match>(?:www[. ]
+?|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\. ?[^\s]{2,}|N[/a-zA-Z]+|[wW]+[. ]\w+[. ]\w{3}|\w+[.
+]?(?:com|COM|org|ORG|edu|EDU))"
 gross_receipts,words,Item G,0,Item G,0,Bottom Right Corner,0.01,Item H,0,Page 1,"(?P<match>-?(?P<open_par>\()?\d+[\d,.]*(?(open_par)\)|)|\b[ooIL]\b)(?:\s|$)"
 year_formation,words,Item L,-0.001,Item L,0,Bottom Right Corner,0.01,"Part I, Item 1",0,Page 1,(?P<match>\d{4})
 state_of_domicile,words,Item M,-0.001,Item M,0,Bottom Right Corner,0.01,"Part I, Item 1",0,Page 1,(?P<match>[A-Z]{2})

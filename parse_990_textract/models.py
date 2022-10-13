@@ -83,6 +83,15 @@ class TableExtractor:
     fields: list[str]
     field_labels: pd.Series
 
+    @property
+    def numeric_cols(self):
+        if self.header_top_label == "(b) Number of offices":
+            return (1, 2, 5)
+        elif self.header_top_label == "(a) Name of organization":
+            return (4, 6)
+        elif self.header_top_label == "(a) Type":
+            return (2, 3, 5)
+
     def get_word_delta(self, words, page):
         word_delta = getattr(self, "_word_delta", None)
         if word_delta is not None:
@@ -198,16 +207,14 @@ class TableExtractor:
 
     def get_rows(self, words, page):
         table_words = self.get_table_words(words, page)
-
+        y_tol = table_words["Height"].median()
         if not table_words.shape[0]:
             return []
-        y_tol = table_words["Height"].median() * 0.5
         word_clusters = cluster_words(
             table_words,
             table_words["Height"].min(),
             "Midpoint_Y",
         )
-
         col_spans = self.get_col_spans(words, page)
         columnized = columnize(word_clusters[0], col_spans)
         columnized.index = self.fields
@@ -219,7 +226,7 @@ class TableExtractor:
         top_ws = last_cluster_coords["Top"].min() - self.get_table_top(
             words, page
         )
-        if top_ws > y_tol * 3:
+        if top_ws > y_tol * 4:
             alignment = "BOTTOM"
         else:
             alignment = "UNKNOWN"
@@ -229,30 +236,35 @@ class TableExtractor:
             cluster_coords = pd.DataFrame.from_records(
                 columnized.map(get_cluster_coords)
             )
+            nonempty = cluster_coords.dropna().index.to_series()
+            last_nonempty = last_cluster_coords.dropna().index.to_series()
+            more_cols = (~nonempty.isin(last_nonempty)).any()
+            less_cols = (~last_nonempty.isin(nonempty)).any()
+            both_numeric = (
+                nonempty.isin(self.numeric_cols)
+                & last_nonempty.isin(self.numeric_cols)
+            ).any()
             y_delta = (
                 cluster_coords["Top"].min()
                 - last_cluster_coords["Bottom"].max()
             )
-            if y_delta > y_tol:
+            if (
+                both_numeric
+                or (more_cols and (alignment == "TOP"))
+                or (less_cols and (alignment == "BOTTOM"))
+                or (y_delta > y_tol)
+            ):
                 combined_row = combine_row(current_row)
                 rows.append(combined_row)
                 current_row = [columnized]
+            elif less_cols and (alignment == "UNKNOWN"):
+                alignment = "TOP"
+                current_row.append(columnized)
+            elif more_cols and (alignment == "UNKNOWN"):
+                alignment = "BOTTOM"
+                current_row.append(columnized)
             else:
-                nonempty = cluster_coords.dropna().index.to_series()
-                last_nonempty = last_cluster_coords.dropna().index.to_series()
-                delta_cols = (~nonempty.isin(last_nonempty)).any()
-                if not delta_cols and (alignment == "UNKNOWN"):
-                    alignment = "TOP"
-                    current_row.append(columnized)
-                elif delta_cols and (alignment == "UNKNOWN"):
-                    alignment = "BOTTOM"
-                    current_row.append(columnized)
-                elif delta_cols and (alignment == "TOP"):
-                    combined_row = combine_row(current_row)
-                    rows.append(combined_row)
-                    current_row = [columnized]
-                else:
-                    current_row.append(columnized)
+                current_row.append(columnized)
             last_cluster_coords = cluster_coords
         combined_row = combine_row(current_row)
         rows.append(combined_row)
