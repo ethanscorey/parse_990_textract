@@ -90,3 +90,17 @@ aws lambda invoke \
   EIN_[EIN]_YEAR_[YEAR]_FORMTYPE_[FORMTYPE]_OUTPUT.json
 ```
 (You can replace the name of the output file with whatever name you prefer.)
+
+#### Building and Testing Locally
+If you have the [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) installed, you can also build and test the function locally. To do so, perform the following steps.
+
+1. Run `sam build` to create the required build artifact.
+2. Create an `events.json` file with the event data specified above.
+3. Run `sam local invoke "Parse990TextractFunction" -e event.json`
+
+And that's it! Please note that you may have some difficulties with Docker and/or SAM depending on
+how you have your AWS credentials stored. If you're able to run Docker without root access, then SAM
+should run fine as long as you have [setup your AWS
+credentials](https://docs.aws.amazon.com/cli/v1/userguide/cli-configure-quickstart.html). If you
+require root access to run Docker, then ensure that your AWS credentials are available in the root
+environment.
