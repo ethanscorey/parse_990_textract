@@ -42,7 +42,7 @@ aws iam attach-role-policy \
   --policy-arn arn:aws:iam::aws:policy/AmazonS3ObjectLambdaExecutionRolePolicy
 ```
 
-6. Create your Lambda function using the container. For best performance, provision the function with at least 512 MB of memory and a timeout of at least 45 seconds.
+6. Create your Lambda function using the container. For best performance, provision the function with at least 1024 MB of memory and a timeout of at least 360  seconds. If you want to parse the largest files, you may need to increase these thresholds further, but these parameters should work for about 99 percent of 990s.
 
 ```
 aws lambda create-function \

@@ -74,7 +74,7 @@ def clean_num(text) -> str:
 def cluster_words(words, tolerance, attribute):
     if (tolerance == 0) or (words.shape[0] < 2):
         return [
-            [word]
+            pd.DataFrame([word])
             for (_idx, word) in words.sort_values(by=attribute).iterrows()
         ]
     groups = []

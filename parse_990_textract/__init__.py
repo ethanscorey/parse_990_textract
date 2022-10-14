@@ -66,7 +66,7 @@ def handler(event, context):
     if lines.loc[
         (lines["Page"] == page_map["Page 1"])
         & lines["Text"].str.contains(
-            "Net rental income|Direct public|IRS label"
+            "Net rental income|Direct public|2007 calendar"
         ),
         "Page",
     ].any():
