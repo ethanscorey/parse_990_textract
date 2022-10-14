@@ -1,0 +1,100 @@
+﻿landmark,regex,left_default,top_default,page,x_tolerance,y_tolerance
+Item C,Name.+zation,0.15,0.11,Page 1,0.1,0.1
+Item D,Employer,0.71,0.11,Page 1,0.1,0.1
+Item E,Te[tl][ae]phone,0.81,0.17,Page 1,0.2,0.1
+Item F,Name.+fficer,0.14,0.22,Page 1,0.1,0.1
+Item G,"Gross [rR]e\w{3,}",0.71,0.19,Page 1,0.1,0.1
+Item H,H\(a\),0.63,0.22,Page 1,0.2,0.1
+Item I,Tax\W*exempt [se]tatu[es],0.02,0.25,Page 1,0.2,0.1
+Item J,Website|J W\w+,0.02,0.26,Page 1,0.09,0.2
+Item K,Form of [oO]rg|Type of [oO]rg,0.02,0.28,Page 1,0.09,0.2
+Item L,Y[eo]ar of [Ff]ormation,0.54,0.28,Page 1,0.2,0.2
+Item M,[dD]omici[tl]e,0.71,0.28,Page 1,0.2,0.2
+"Part I, Item 1",mission or most,0.1,0.3,Page 1,0.1,0.15
+"Part I, Item 2",organization discontinued,0.21,0.36,Page 1,0.2,0.2
+"Part I, Item 3",Number of voting,0.07,0.37,Page 1,0.1,0.15
+"Part I, Item 4",Number of [iI]nd,0.07,0.39,Page 1,0.1,0.15
+"Part I, Item 5",[iI]ndividuals employed|employees,0.1,0.41,Page 1,0.1,0.15
+"Part I, Item 6",volunt[ea]{2}rs,0.1,0.43,Page 1,0.1,0.15
+"Part I, Item 7a",unrelated business revenue,0.08,0.45,Page 1,0.1,0.15
+"Part I, Item 7b",Net unrelated bu,0.07,0.47,Page 1,0.1,0.15
+"Part I, Item 8",Contributions and grants,0.07,0.49,Page 1,0.1,0.15
+"Part I, Item 9",Program service revenue,0.07,0.53,Page 1,0.1,0.15
+"Part I, Item 10",Investment income,0.07,0.55,Page 1,0.1,0.15
+"Part I, Item 11",Other revenue,0.07,0.57,Page 1,0.1,0.1
+"Part I, Item 12",Total revenue,0.07,0.59,Page 1,0.1,0.1
+"Part I, Item 13",Grants and s,0.07,0.61,Page 1,0.1,0.1
+"Part I, Item 14",Benefits paid,0.07,0.63,Page 1,0.1,0.1
+"Part I, Item 15",Salaries.+other,0.07,0.65,Page 1,0.1,0.15
+"Part I, Item 16a",Profession[ae]l fundraising,0.07,0.67,Page 1,0.1,0.15
+"Part I, Item 16b",b\s*Total|Total fundraising,0.07,0.69,Page 1,0.1,0.15
+"Part I, Item 17",Other expenses|17 Oth,0.07,0.71,Page 1,0.1,0.15
+"Part I, Item 18","To.{,5}expenses",0.07,0.73,Page 1,0.1,0.15
+"Part I, Item 19",Revenue less,0.07,0.74,Page 1,0.1,0.15
+"Part I, Item 20",Total assets,0.07,0.76,Page 1,0.1,0.15
+"Part I, Item 21",Total\s*(?:li|[hR])abilities,0.07,0.78,Page 1,0.1,0.15
+"Part I, Item 22",N[eao]t\W*assets,0.07,0.8,Page 1,0.1,0.15
+Prior Year,Prior Year,0.5,0.46,Page 1,0.2,0.15
+Current Year,^(?:Prior Year)?\s*Current Y\w{2}r\s*$,0.79,0.46,Page 1,0.1,0.15
+End of Year,End of Y\w{2}r,0.79,0.66,Page 1,0.1,0.2
+Beginning of Current Year,Beginning of (?:Current )?Year,0.65,0.71,Page 1,0.1,0.15
+Signature Block,Signature Block,0.1,0.72,Page 1,0.1,0.2
+"Part IX, Item 1","assistance to domestic org|See Part IV, line 21",0.1,0.12,Page 10,0.1,0.1
+"Part IX, Item 2","Part IV[,.] [flI]ine 22|domestic individuals",0.1,0.17,Page 10,0.1,0.1
+"Part IX, Item 3",assistance to for|outside the,0.1,0.19,Page 10,0.1,0.1
+"Part IX, Item 4",Benefits paid to or for members\s*$,0.1,0.23,Page 10,0.1,0.1
+"Part IX, Item 5",Compensation of current of,0.1,0.25,Page 10,0.1,0.1
+"Part IX, Item 6",Compensation not,0.1,0.28,Page 10,0.1,0.1
+"Part IX, Item 7",Other sal,0.1,0.32,Page 10,0.1,0.1
+"Part IX, Item 8",Pension plan,0.1,0.34,Page 10,0.1,0.1
+"Part IX, Item 9",Other employee benefits,0.1,0.37,Page 10,0.1,0.1
+"Part IX, Item 10",Payroll taxes,0.1,0.38,Page 10,0.1,0.1
+"Part IX, Item 11a",a\s*Management,0.1,0.41,Page 10,0.1,0.1
+"Part IX, Item 11b",b\s*Legal,0.1,0.43,Page 10,0.1,0.1
+"Part IX, Item 11c",[Cc]\s*Accounting,0.1,0.45,Page 10,0.1,0.1
+"Part IX, Item 11d",d\s*Lobbying,0.1,0.46,Page 10,0.1,0.1
+"Part IX, Item 11e",Profe,0.1,0.49,Page 10,0.1,0.1
+"Part IX, Item 11f",Investment m,0.1,0.49,Page 10,0.1,0.1
+"Part IX, Item 11g",Other.+\([iIl]f|g Oth,0.1,0.51,Page 10,0.1,0.1
+"Part IX, Item 12",Advert.+otion,0.1,0.53,Page 10,0.1,0.1
+"Part IX, Item 13",Office expen,0.1,0.55,Page 10,0.1,0.1
+"Part IX, Item 14",Information tech,0.1,0.57,Page 10,0.1,0.1
+"Part IX, Item 15",Royalt,0.1,0.59,Page 10,0.1,0.1
+"Part IX, Item 16",Occupancy,0.1,0.61,Page 10,0.1,0.1
+"Part IX, Item 17",Travel,0.1,0.63,Page 10,0.1,0.1
+"Part IX, Item 18",Payments of travel,0.1,0.65,Page 10,0.1,0.1
+"Part IX, Item 19",Conferences,0.1,0.67,Page 10,0.1,0.1
+"Part IX, Item 20",Interest,0.1,0.69,Page 10,0.1,0.1
+"Part IX, Item 21",Payments to af,0.1,0.71,Page 10,0.1,0.1
+"Part IX, Item 22","Depre.+,\s*dep.+,\s*an",0.1,0.73,Page 10,0.1,0.1
+"Part IX, Item 23",Insurance,0.1,0.75,Page 10,0.1,0.1
+"Part IX, Item 24a",^a(?:\s|$),0.1,0.79,Page 10,0.1,0.1
+"Part IX, Item 24b",^b(?:\s|$),0.1,0.81,Page 10,0.1,0.1
+"Part IX, Item 24c",^[cC](?:\s|$),0.1,0.83,Page 10,0.1,0.1
+"Part IX, Item 24d",^d(?:\s|$),0.1,0.85,Page 10,0.1,0.1
+"Part IX, Item 24e",^e(?:\s|$),0.1,0.86,Page 10,0.1,0.1
+"Part IX, Item 25",Total functional,0.1,0.87,Page 10,0.1,0.1
+"Part IX, Item 26",Joint [cC],0.1,0.89,Page 10,0.1,0.1
+Total expenses,^\(A\)$,0.49,0.1,Page 10,0.1,0.1
+Program service expenses,^\(B\)$,0.62,0.1,Page 10,0.1,0.1
+Management and general expenses,^\([Cc]\)$,0.75,0.1,Page 10,0.1,0.1
+Fundraising expenses,^\(D\)$,0.88,0.1,Page 10,0.1,0.1
+"Schedule F, Part I, Item 3a",^3a Sub,0.01,0.8,"Schedule F, Page 1",0.1,0.6
+"Schedule F, Part I, Item 3b",^b Total,0.01,0.82,"Schedule F, Page 1",0.1,0.6
+"Schedule F, Part I, Item 3c",^[cC]?\s*Totals,0.01,0.86,"Schedule F, Page 1",0.1,0.6
+(b) Number of offices,\(b\) Number,0.27,0.51,"Schedule F, Page 1",0.1,0.6
+(c) Number of employees,\([cC]\) Number,0.38,0.51,"Schedule F, Page 1",0.1,0.6
+(d) Activities conducted,\(d\) Act,0.49,0.51,"Schedule F, Page 1",0.1,0.6
+(e) Specific type,\([aeo]\) If,0.65,0.51,"Schedule F, Page 1",0.1,0.6
+(f) Total expenditures,\(f\) Tota,0.84,0.51,"Schedule F, Page 1",0.1,0.6
+"Schedule F, Part II, Item 2",recipient organizations listed,0,0.78,"Schedule F, Page 2",0.1,0.6
+"Schedule F, Part II, Item 3",number of other orga,0,0.9,"Schedule F, Page 2",0.1,0.6
+(a) Name of organization,\(a\) Name,0.03,0.2,"Schedule F, Page 2",0.1,0.6
+(b) IRS code,\(b\) IRS,0.12,0.2,"Schedule F, Page 2",0.1,0.6
+(c) Region,\([cC]\) Region,0.23,0.2,"Schedule F, Page 2",0.1,0.6
+(d) Purpose of grant,\(d\) Purpose,0.33,0.2,"Schedule F, Page 2",0.1,0.6
+(e) Amount of cash grant,\(e\) Amount,0.44,0.2,"Schedule F, Page 2",0.1,0.6
+(f) Manner of cash disbursement,\(f\) Manner,0.56,0.2,"Schedule F, Page 2",0.1,0.6
+(g) Amount of noncash assistance,\(g\) Amount,0.68,0.2,"Schedule F, Page 2",0.1,0.6
+(h) Description of noncash assistance,\(h\) Descr,0.78,0.2,"Schedule F, Page 2",0.1,0.6
+(i) Method of valuation,\(i\) Method,0.9,0.2,"Schedule F, Page 2",0.1,0.6

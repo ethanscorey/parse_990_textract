@@ -1,0 +1,4 @@
+﻿table,header_top,header_top_delta,table_top,table_top_delta,table_bottom,table_bottom_delta,index_col_left,index_col_left_delta,index_col_right,index_col_right_delta,row_margin
+Activities per Region,(b) Number of offices,0,Bottom (d),0.005,"Schedule F, Part I, Item 3a",0,(f) Total Expenditures,-0.005,Bottom Right Corner,0,0
+Grants to Organizations Outside the United States,(a) Name of organization,0,Bottom (i),0.005,"Schedule F, Part II, Item 2",0,(f) Manner,-0.005,(g) Amount,-0.01,0
+Grants to Individuals Outside the United States,(a) Type,0,Bottom (h),0.005,Schedule F,0,(c) Number of recipients,-0.005,(d) Amount,-0.01,0
