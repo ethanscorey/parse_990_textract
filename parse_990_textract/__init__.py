@@ -35,7 +35,7 @@ def handler(event, context):
         "parse_data/schedule_f_table_roadmap.csv"
     )
     schedule_f_table_extractor_df = pd.read_csv(
-        "schedule_f_table_extractors.csv"
+        "parse_data/schedule_f_table_extractors.csv"
     )
     schedule_f_row_extractor_df = pd.read_csv(
         "parse_data/schedule_f_row_extractors.csv"

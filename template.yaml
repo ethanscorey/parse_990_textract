@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  python3.9
+
+  A Lambda function for processing 990 Textract outputs.
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 300
+
+Resources:
+  Parse990TextractFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Role: "arn:aws:iam::916063273633:role/lambda-s3-role"
+      PackageType: Image
+      Architectures:
+        - x86_64
+      Events:
+        Parse990Output:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /parse_990_textract
+            Method: get
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: .
+      DockerTag: python3.9-v1
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  Parse990TextractApi:
+    Description: "API Gateway endpoint URL for Prod stage for Parse990Textract function."
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/parse_990_textract"
+  Parse990TextractFunction:
+    Description: "parse_990_textract ARN"
+    Value: !GetAtt Parse990TextractFunction.Arn
+  Parse990TextractFunctionIamRole:
+    Description: "IAM Role created for parse_990_textract function"
+    Value: "arn:aws:iam::916063273633:role/lambda-s3-role"

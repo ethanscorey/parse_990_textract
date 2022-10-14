@@ -3,3 +3,4 @@ __pycache__
 validation_pdfs/
 poetry.lock
 poetry.lock
+event.json

@@ -1,4 +1,4 @@
 *
 !parse_990_textract/*.py
 !requirements.txt
-!parse/*.csv
+!parse_data/*.csv

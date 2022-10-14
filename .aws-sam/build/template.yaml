@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'python3.9
+
+  A Lambda function for processing 990 Textract outputs.
+
+  '
+Globals:
+  Function:
+    Timeout: 300
+Resources:
+  Parse990TextractFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: arn:aws:iam::916063273633:role/lambda-s3-role
+      PackageType: Image
+      Architectures:
+      - x86_64
+      Events:
+        Parse990Output:
+          Type: Api
+          Properties:
+            Path: /parse_990_textract
+            Method: get
+      ImageUri: parse990textractfunction:python3.9-v1
+    Metadata:
+      DockerContext: /home/ethan/pyprojects/parse_990_textract
+      DockerTag: python3.9-v1
+      Dockerfile: Dockerfile
+      SamResourceId: Parse990TextractFunction
+Outputs:
+  Parse990TextractApi:
+    Description: API Gateway endpoint URL for Prod stage for Parse990Textract function.
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/parse_990_textract
+  Parse990TextractFunction:
+    Description: parse_990_textract ARN
+    Value:
+      Fn::GetAtt:
+      - Parse990TextractFunction
+      - Arn
+  Parse990TextractFunctionIamRole:
+    Description: IAM Role created for parse_990_textract function
+    Value: arn:aws:iam::916063273633:role/lambda-s3-role
