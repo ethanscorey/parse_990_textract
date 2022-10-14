@@ -29,13 +29,17 @@ def handler(event, context):
     job_id = event.get("textract_job_id")
     pdf_key = event.get("pdf_key")
 
-    extractor_df = load_extractor_df("990_extractors.csv")
-    roadmap_df = pd.read_csv("990_roadmap.csv")
-    schedule_f_tablemap_df = pd.read_csv("schedule_f_table_roadmap.csv")
+    extractor_df = load_extractor_df("parse_data/990_extractors.csv")
+    roadmap_df = pd.read_csv("parse_data/990_roadmap.csv")
+    schedule_f_tablemap_df = pd.read_csv(
+        "parse_data/schedule_f_table_roadmap.csv"
+    )
     schedule_f_table_extractor_df = pd.read_csv(
         "schedule_f_table_extractors.csv"
     )
-    schedule_f_row_extractor_df = pd.read_csv("schedule_f_row_extractors.csv")
+    schedule_f_row_extractor_df = pd.read_csv(
+        "parse_data/schedule_f_row_extractors.csv"
+    )
 
     PART_I_HEADER = (
         r"\(a\)\s*Region|\(d\)\s*Activities|\(e\)\s*"
