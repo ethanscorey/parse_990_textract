@@ -4,3 +4,4 @@ validation_pdfs/
 poetry.lock
 poetry.lock
 event.json
+*.pdf

@@ -10,6 +10,7 @@ logger = setup_logger(__name__, config)
 def find_pages(ocr_data):
     return {
         "Page 1": id_first_page(ocr_data),
+        "Page 9": id_page_9(ocr_data),
         "Page 10": id_page_10(ocr_data),
         "Schedule F, Page 1": (sched_f := id_sched_f(ocr_data)),
         "Schedule F, Page 2": sched_f + 1 if sched_f else sched_f,
@@ -24,6 +25,17 @@ def id_sched_f(ocr_data):
         "Page",
     ]
     if not matching_page.count():
+        return 0
+    return matching_page.iloc[0]
+
+
+def id_page_9(ocr_data):
+    matching_page = ocr_data.loc[
+        ocr_data["Text"].str.contains("Statement of Revenue"),
+        "Page",
+    ]
+    if not matching_page.count():
+        logger.error("Statement of revenue missing.")
         return 0
     return matching_page.iloc[0]
 

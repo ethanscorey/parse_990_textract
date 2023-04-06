@@ -3,10 +3,10 @@ Item C,Name.+zation,0.15,0.11,Page 1,0.1,0.1
 Item D,Employer,0.71,0.11,Page 1,0.1,0.1
 Item E,Te[tl][ae]phone,0.81,0.17,Page 1,0.2,0.1
 Item F,Name.+fficer,0.14,0.22,Page 1,0.1,0.1
-Item G,"Gross [rR]e\w{3,}",0.71,0.19,Page 1,0.1,0.1
+Item G,"Gross\s+[rR]e\w{3,}",0.71,0.19,Page 1,0.1,0.1
 Item H,H\(a\),0.63,0.22,Page 1,0.2,0.1
-Item I,Tax\W*exempt [se]tatu[es],0.02,0.25,Page 1,0.2,0.1
-Item J,Website|J W\w+,0.02,0.26,Page 1,0.09,0.2
+Item I,Tax\W*exempt\s+[se]tatu[es],0.02,0.25,Page 1,0.2,0.1
+Item J,Website|J\s+W\w+,0.02,0.26,Page 1,0.09,0.2
 Item K,Form of [oO]rg|Type of [oO]rg,0.02,0.28,Page 1,0.09,0.2
 Item L,Y[eo]ar of [Ff]ormation,0.54,0.28,Page 1,0.2,0.2
 Item M,[dD]omici[tl]e,0.71,0.28,Page 1,0.2,0.2
@@ -39,7 +39,52 @@ Current Year,^(?:Prior Year)?\s*Current Y\w{2}r\s*$,0.79,0.46,Page 1,0.1,0.15
 End of Year,End of Y\w{2}r,0.79,0.66,Page 1,0.1,0.2
 Beginning of Current Year,Beginning of (?:Current )?Year,0.65,0.71,Page 1,0.1,0.15
 Signature Block,Signature Block,0.1,0.72,Page 1,0.1,0.2
-"Part IX, Item 1","assistance to domestic org|See Part IV, line 21",0.1,0.12,Page 10,0.1,0.1
+"Part VIII, Item 1a","Federated campaigns",0.1,0.14,Page 9,0.1,0.1
+"Part VIII, Item 1b","Membership dues",0.1,0.15,Page 9,0.1,0.1
+"Part VIII, Item 1c","Fundraising events",0.1,0.17,Page 9,0.1,0.1
+"Part VIII, Item 1d","Related organizations",0.1,0.18,Page 9,0.1,0.1
+"Part VIII, Item 1e","Government grants",0.1,0.19,Page 9,0.1,0.1
+"Part VIII, Item 1f","All other contr",0.1,0.2,Page 9,0.1,0.1
+"Part VIII, Item 1g","Noncash contr",0.1,0.25,Page 9,0.1,0.1
+"Part VIII, Item 1h","Add lines [1iIl]a",0.09,0.27,Page 9,0.1,0.1
+"Part VIII, Item 2a","^2a",0.09,0.29,Page 9,0.1,0.1
+"Part VIII, Item 2b","^b",0.09,0.31,Page 9,0.1,0.1
+"Part VIII, Item 2c","^c",0.09,0.32,Page 9,0.1,0.1
+"Part VIII, Item 2d","^d",0.09,0.34,Page 9,0.1,0.1
+"Part VIII, Item 2e","^e",0.09,0.35,Page 9,0.1,0.1
+"Part VIII, Item 2f","All other program",0.1,0.37,Page 9,0.1,0.1
+"Part VIII, Item 2g","g\s+Total",0.09,0.38,Page 9,0.1,0.1
+"Part VIII, Item 3","Investment income",0.1,0.4,Page 9,0.1,0.1
+"Part VIII, Item 4","Income from investment",0.1,0.41,Page 9,0.1,0.1
+"Part VIII, Item 5","Royalties",0.1,0.43,Page 9,0.1,0.1
+"Part VIII, Item 6a","Gross [rR]ents",0.1,0.47,Page 9,0.1,0.1
+"Part VIII, Item 6b","Less rental",0.1,0.48,Page 9,0.1,0.1
+"Part VIII, Item 6c","Rental income",0.1,0.5,Page 9,0.1,0.1
+"Part VIII, Item 6d","Net rental",0.1,0.51,Page 9,0.1,0.1
+"Part VIII, Item 7a","Gross amount",0.1,0.54,Page 9,0.1,0.1
+"Part VIII, Item 7b","Less cost or",0.1,0.56,Page 9,0.1,0.1
+"Part VIII, Item 7c","Gain or \(?loss\)?",0.1,0.59,Page 9,0.1,0.1
+"Part VIII, Item 7d","Net gain or \(?loss\)?",0.1,0.61,Page 9,0.1,0.1
+"Part VIII, Item 8a","Gross\s+income\s+from\s+fun",0.1,0.63,Page 9,0.1,0.1
+"Part VIII, Item 8b","Less:? direct expenses",0.1,0.68,Page 9,0.1,0.04
+"Part VIII, Item 8c","Net [iIl1]ncome or \(?loss\)? from fun",0.1,0.69,Page 9,0.1,0.1
+"Part VIII, Item 9a","Gross\s+income\s+from\s+gam",0.1,0.71,Page 9,0.1,0.1
+"Part VIII, Item 9b","Less:? direct expenses",0.1,0.74,Page 9,0.1,0.04
+"Part VIII, Item 9c","Net income or \(?loss\)? from gam",0.1,0.75,Page 9,0.1,0.1
+"Part VIII, Item 10a","Gross sales",0.1,0.77,Page 9,0.1,0.1
+"Part VIII, Item 10b","Less:? cost of goods",0.1,0.8,Page 9,0.1,0.1
+"Part VIII, Item 10c","Net income or \(?[il1I]oss\)? from sales of inventory",0.1,0.82,Page 9,0.1,0.1
+"Part VIII, Item 11a","^11\s*a",0.09,0.85,Page 9,0.1,0.1
+"Part VIII, Item 11d","All other revenue",0.1,0.9,Page 9,0.1,0.1
+"Part VIII, Item 11e","Total\. Add",0.1,0.91,Page 9,0.1,0.1
+"Part VIII, Item 12","Total [rR]evenue",0.1,0.93,Page 9,0.1,0.1
+"Total revenue","Total [rR]evenue",0.48,0.1,Page 9,0.3,0.1
+"Related or exempt","Related",0.6,0.1,Page 9,0.3,0.1
+"Unrelated business","Unrelated",0.73,0.1,Page 9,0.3,0.1
+"Revenue excluded","Revenue",0.85,0.1,Page 9,0.3,0.1
+"Part VIII Summary Column","^[1Ili]b",0.33,0.15,Page 9,0.3,0.1
+"Part VIII Pre-Summary Column","Real",.29,.46,Page 9,0.3,0.1
+"Part IX, Item 1","organizations in the U|assistance to domestic org|See Part IV, line 21",0.1,0.12,Page 10,0.1,0.1
 "Part IX, Item 2","Part IV[,.] [flI]ine 22|domestic individuals",0.1,0.17,Page 10,0.1,0.1
 "Part IX, Item 3",assistance to for|outside the,0.1,0.19,Page 10,0.1,0.1
 "Part IX, Item 4",Benefits paid to or for members\s*$,0.1,0.23,Page 10,0.1,0.1
