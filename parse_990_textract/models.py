@@ -31,14 +31,16 @@ class BoundingBox:
     bottom_delta: int
 
     def get_text_in_box(self, text, page_no):
-        text_in_box = text.loc[
-            text["Midpoint_X"].between(
-                self.left + self.left_delta, self.right + self.right_delta
-            )
-            & text["Midpoint_Y"].between(
-                self.top + self.top_delta, self.bottom + self.bottom_delta
-            )
-            & (text["Page"] == page_no),
+        page_text = text[page_no].sort_values(by="WordIndex")
+        text_in_box = page_text.loc[
+            lambda df: (
+                df["Midpoint_X"].between(
+                    self.left + self.left_delta, self.right + self.right_delta
+                )
+                & df["Midpoint_Y"].between(
+                    self.top + self.top_delta, self.bottom + self.bottom_delta
+                )
+            ),
             "Text",
         ].agg(lambda x: " ".join(x.values))
         if not any(text_in_box):
@@ -55,6 +57,8 @@ class Extractor:
     regex: re.Pattern
 
     def extract(self, words, lines):
+        if not self.page:
+            return ""
         if self.strategy == "words":
             words_in_box = self.bounding_box.get_text_in_box(
                 words,

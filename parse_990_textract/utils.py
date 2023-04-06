@@ -191,3 +191,15 @@ def find_crossing_right(df, right):
     return df.loc[
         (df["Right"] > right * 1.01) & (df["Left"] < right), "Left"
     ].min()
+
+
+def sort_words(df):
+    """Cluster words into lines, then sort left to right."""
+    lines = cluster_words(df, df["Height"].min(), "Midpoint_Y")
+    sorted_words = pd.concat(
+        [
+            cluster.sort_values("Left") for cluster in lines
+        ]
+    )
+    word_order = sorted_words.reset_index().index
+    return pd.Series(word_order, index=sorted_words.index)

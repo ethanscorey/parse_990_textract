@@ -107,4 +107,4 @@ def open_df(bucket, job_id, prefix="textract-output"):
         ).astype(int),
         File=job_id,
     )
-    return rotate_pages(df).sort_values(by=["Page", "Line_No", "Left"])
+    return rotate_pages(df).sort_values(by="Page")

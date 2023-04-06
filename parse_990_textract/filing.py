@@ -1,7 +1,7 @@
 import pandas as pd
 
 from .parse import create_extractors, find_item
-from .utils import setup_config, setup_logger
+from .utils import setup_config, setup_logger, sort_words
 
 config = setup_config()
 logger = setup_logger(__name__, config)
@@ -46,10 +46,18 @@ def create_roadmap(lines, roadmap_df, page_map):
 
 
 def extract_from_roadmap(words, lines, roadmap, extractor_df, page_map):
+    page_words = {
+        page_no: words.loc[index].assign(WordIndex=lambda df: sort_words(df))
+        for (page_no, index) in words.groupby("Page").groups.items()
+    }
+    page_lines = {
+        page_no: lines.loc[index].assign(WordIndex=lambda df: sort_words(df))
+        for (page_no, index) in lines.groupby("Page").groups.items()
+    }
     extractors = create_extractors(extractor_df, roadmap, page_map)
     return pd.Series(
         extractors.map(
-            lambda extractor: extractor.extract(words, lines)
+            lambda extractor: extractor.extract(page_words, page_lines)
         ).values,
         index=extractor_df["field_name"],
     )

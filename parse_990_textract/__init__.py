@@ -59,8 +59,8 @@ def handler(event, context):
     bucket = boto3.resource("s3").Bucket(bucket_name)
     data = open_df(bucket, job_id)
 
-    lines = data.loc[data["BlockType"] == "LINE"]
-    words = data.loc[data["BlockType"] == "WORD"]
+    lines = data.loc[data["BlockType"] == "LINE"].copy()
+    words = data.loc[data["BlockType"] == "WORD"].copy()
     pages = lines.groupby("Page")
     page_map = find_pages(lines)
     if lines.loc[
